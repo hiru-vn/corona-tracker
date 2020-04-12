@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "54435285754",
+    "firebase_url": "https://vn-corona-tracker.firebaseio.com",
+    "project_id": "vn-corona-tracker",
+    "storage_bucket": "vn-corona-tracker.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:54435285754:android:98f61719799e44f0bb1743",
+        "android_client_info": {
+          "package_name": "com.huyuit.corona_tracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "54435285754-rslh312l4nabd966td5lpv099j29s9dq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.huyuit.corona_tracker",
+            "certificate_hash": "4cd17c36f6303b4a935dfa725b609806ca7422ab"
+          }
+        },
+        {
+          "client_id": "54435285754-0n3gmboesvgj36b81schctd43q0b9b9v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAoGhN878hgcdNqQiEn58DLZbY97F5LZOQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "54435285754-0n3gmboesvgj36b81schctd43q0b9b9v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
