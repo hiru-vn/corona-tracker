@@ -1,10 +1,13 @@
+import 'package:corona_tracker/providers/login/login_controller.dart';
 import 'package:corona_tracker/ui/custom_color.dart';
 import 'package:corona_tracker/ui/reuseable/responsive_size.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/widgets/login/btn_login.dart';
 import 'package:corona_tracker/ui/widgets/login/phone_field.dart';
+import 'package:countdown_flutter/countdown_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
+import 'package:provider/provider.dart';
 
 class LoginPhoneOtp extends StatefulWidget {
   final PageController pageController;
@@ -14,39 +17,22 @@ class LoginPhoneOtp extends StatefulWidget {
   _LoginPhoneOtpState createState() => _LoginPhoneOtpState();
 }
 
-class _LoginPhoneOtpState extends State<LoginPhoneOtp>
-    with SingleTickerProviderStateMixin {
-  AnimationController _animationController;
-  Animation _animation;
+class _LoginPhoneOtpState extends State<LoginPhoneOtp> {
   final FocusNode _focusNodePhone = FocusNode();
   final FocusNode _focusNodeOtp = FocusNode();
   final PageController _pageController = PageController();
 
   @override
   void initState() {
-    _animationController = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 300));
-    _animation = Tween(begin: 50.0, end: 200.0).animate(_animationController)
-      ..addListener(() {
-        setState(() {});
-      });
-
-    _focusNodePhone.addListener(() {
-      if (_focusNodePhone.hasFocus) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    });
-    _focusNodeOtp.addListener(() {
-      if (_focusNodeOtp.hasFocus) {
-        _animationController.forward();
-      } else {
-        _animationController.reverse();
-      }
-    });
-
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _focusNodePhone.dispose();
+    _focusNodeOtp.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -72,7 +58,6 @@ class _LoginPhoneOtpState extends State<LoginPhoneOtp>
             ],
           ),
         ),
-        SizedBox(height: _animation.value),
       ],
     );
   }
@@ -86,6 +71,7 @@ class PhoneOtpView extends StatelessWidget {
   PhoneOtpView(this.pageController, {this.focusNode});
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<LoginController>(context);
     return Container(
       width: ResponsiveSize.widthMultiplier * 100,
       padding: EdgeInsets.only(top: ResponsiveSize.heightMultiplier * 30),
@@ -123,15 +109,18 @@ class PhoneOtpView extends StatelessWidget {
                       height: 2,
                     ),
                     PhoneField(
-                      focusNode: focusNode,
-                    ),
+                        //focusNode: focusNode,
+                        onSave: (phone) => controller.phone = phone,
+                        ),
                     const SpacingBox(
                       height: 1,
                     ),
                     BtnLogin(
                       text: 'Gửi mã OTP',
                       formLoginKey: _formPhoneOtpKey,
-                      onPress: () {},
+                      onPress: () { 
+                        controller.logic.requestOtp();
+                      },
                     ),
                   ],
                 ),
@@ -152,6 +141,7 @@ class OtpConfirmView extends StatelessWidget {
   OtpConfirmView(this.pageController, {this.focusNode});
   @override
   Widget build(BuildContext context) {
+    final controller = Provider.of<LoginController>(context);
     return Center(
       child: Form(
         key: _formOtpKey,
@@ -181,7 +171,8 @@ class OtpConfirmView extends StatelessWidget {
                   const SpacingBox(
                     height: 1,
                   ),
-                  _buildPinField(),
+                  _buildPinField(
+                      onChanged: controller.logic.signInWithPhoneNumber),
                   SizedBox(height: ResponsiveSize.heightMultiplier * 2),
                   _buildResend(),
                 ],
@@ -211,44 +202,27 @@ class OtpConfirmView extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Text(
-          'Lưu ý: mã sẽ tự động hết hạn sau 60 giây',
+          'Lưu ý: mã sẽ tự động hết hạn sau ',
           style: TextStyle(
             decoration: TextDecoration.none,
             fontSize: ResponsiveSize.textMultiplier * 2,
             fontWeight: FontWeight.w600,
           ),
         ),
-        // StreamProvider<bool>.value(
-        //   initialData: true,
-        //   value: bloc.countdownStartStream,
-        //   child: Consumer<bool>(
-        //     builder: (context, enable, child) => enable
-        //         ? Countdown(
-        //             duration: const Duration(seconds: 60),
-        //             onFinish: () {
-        //               bloc.countdownStartSink.add(false);
-        //             },
-        //             builder: (ctx, remaining) {
-        //               return Text(
-        //                 '${remaining.inSeconds}',
-        //                 style: TextStyle(
-        //                   color: CustomColor.secondary,
-        //                   fontSize: ResponsiveSize.textMultiplier * 2,
-        //                   fontWeight: FontWeight.w600,
-        //                 ),
-        //               );
-        //             },
-        //           )
-        //         : Text(
-        //             '0',
-        //             style: TextStyle(
-        //               color: CustomColor.secondary,
-        //               fontSize: ResponsiveSize.textMultiplier * 2,
-        //               fontWeight: FontWeight.w600,
-        //             ),
-        //           ),
-        //   ),
-        // ),
+        Countdown(
+          duration: const Duration(seconds: 60),
+          onFinish: () {},
+          builder: (ctx, remaining) {
+            return Text(
+              '${remaining.inSeconds}',
+              style: TextStyle(
+                color: CustomColor.secondary,
+                fontSize: ResponsiveSize.textMultiplier * 2,
+                fontWeight: FontWeight.w600,
+              ),
+            );
+          },
+        ),
         Text(
           ' giây',
           style: TextStyle(
@@ -261,7 +235,7 @@ class OtpConfirmView extends StatelessWidget {
     );
   }
 
-  Widget _buildPinField() {
+  Widget _buildPinField({Function onChanged}) {
     return Container(
       width: ResponsiveSize.widthMultiplier * 80,
       child: PinCodeTextField(
@@ -273,11 +247,15 @@ class OtpConfirmView extends StatelessWidget {
         inactiveColor: CustomColor.primary,
         selectedColor: CustomColor.secondary,
         shape: PinCodeFieldShape.box,
-        animationDuration: Duration(milliseconds: 300),
+        animationDuration: const Duration(milliseconds: 300),
         borderRadius: BorderRadius.circular(5),
         fieldHeight: ResponsiveSize.widthMultiplier * 12,
         fieldWidth: ResponsiveSize.widthMultiplier * 10,
-        onChanged: (pin) {},
+        onChanged: (pin) {
+          if (pin.length == 6) {
+            onChanged();
+          }
+        },
       ),
     );
   }

@@ -18,7 +18,6 @@ class PhoneField extends StatelessWidget {
       },
       controller: _textEditingController,
       focusNode: focusNode,
-      autofocus: true,
       maxLength: 10,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
