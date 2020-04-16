@@ -1,3 +1,4 @@
+import 'package:corona_tracker/providers/home/home_controller.dart';
 import 'package:corona_tracker/providers/login/login_controller.dart';
 import 'package:corona_tracker/ui/pages/home_page.dart';
 import 'package:corona_tracker/ui/pages/login_page.dart';
@@ -25,7 +26,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
           builder: (context) => ChangeNotifierProvider(
               create: (_) => LoginController(), child: LoginPage()));
     case Views.homePage:
-      return CupertinoPageRoute(builder: (context) => HomePage());
+      return CupertinoPageRoute(
+          builder: (context) => ChangeNotifierProvider(
+              create: (_) => HomeController(), child: HomePage()));
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

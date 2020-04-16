@@ -1,4 +1,5 @@
 import 'package:corona_tracker/providers/login/login_controller.dart';
+import 'package:corona_tracker/services/navigate_services.dart';
 import 'package:corona_tracker/ui/custom_color.dart';
 import 'package:corona_tracker/ui/reuseable/responsive_size.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
@@ -109,17 +110,25 @@ class PhoneOtpView extends StatelessWidget {
                       height: 2,
                     ),
                     PhoneField(
-                        //focusNode: focusNode,
-                        onSave: (phone) => controller.phone = phone,
-                        ),
+                      //focusNode: focusNode,
+                      onSave: (phone) => controller.phone = phone,
+                    ),
                     const SpacingBox(
                       height: 1,
                     ),
                     BtnLogin(
                       text: 'Gửi mã OTP',
                       formLoginKey: _formPhoneOtpKey,
-                      onPress: () { 
+                      onPress: () {
+                        final formState = _formPhoneOtpKey.currentState;
+                        if (!formState.validate()) {
+                          return;
+                        }
+                        formState.save();
                         controller.logic.requestOtp();
+                        pageController.nextPage(
+                            duration: const Duration(milliseconds: 300),
+                            curve: Curves.decelerate);
                       },
                     ),
                   ],
@@ -146,6 +155,7 @@ class OtpConfirmView extends StatelessWidget {
       child: Form(
         key: _formOtpKey,
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
               'Xác thực OTP',
@@ -253,7 +263,8 @@ class OtpConfirmView extends StatelessWidget {
         fieldWidth: ResponsiveSize.widthMultiplier * 10,
         onChanged: (pin) {
           if (pin.length == 6) {
-            onChanged();
+            onChanged(pin);
+            navigatorKey.currentState.pushReplacementNamed(Views.homePage);
           }
         },
       ),

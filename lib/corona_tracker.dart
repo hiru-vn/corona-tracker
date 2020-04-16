@@ -15,11 +15,11 @@ class CoronaTracker extends StatelessWidget {
           title: Strings.appName['vi'],
           theme: ThemeData(
             fontFamily: 'Quicksand',
-            scaffoldBackgroundColor: const Color(0xFFEFEFEF)
+            scaffoldBackgroundColor: const Color(0xFFFFFFFF)
           ),
           onGenerateRoute: generateRoute,
           navigatorKey: navigatorKey,
-          initialRoute: Views.loginPage,
+          initialRoute: Views.homePage,
         );
       });
     });
