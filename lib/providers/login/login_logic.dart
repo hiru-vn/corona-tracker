@@ -26,7 +26,9 @@ class LoginLogic extends ChangeNotifier{
 
   void _codeAutoRetrievalTimeout(String verificationId) {}
 
-  void _verificationFailed(AuthException authException) {}
+  void _verificationFailed(AuthException authException) {
+    print(authException.message);
+  }
 
   void _verificationCompleted(AuthCredential auth) {
     FirebaseAuth.instance.signInWithCredential(auth).then((authResult) {
