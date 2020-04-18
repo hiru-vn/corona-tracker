@@ -19,7 +19,7 @@ class CoronaTracker extends StatelessWidget {
           ),
           onGenerateRoute: generateRoute,
           navigatorKey: navigatorKey,
-          initialRoute: Views.loginPage,
+          initialRoute: Views.homePage,
         );
       });
     });

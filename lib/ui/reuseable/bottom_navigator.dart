@@ -14,12 +14,12 @@ class MyBottomNavigationBar extends StatelessWidget {
       height: 50,
       items: <Widget>[
         Icon(
-          Icons.home,
+          Icons.public,
           size: 30,
           color: Colors.black54,
         ),
         Icon(
-          Icons.info,
+          Icons.new_releases,
           size: 30,
           color: Colors.black54,
         ),
