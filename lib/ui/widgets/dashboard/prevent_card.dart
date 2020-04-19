@@ -30,7 +30,7 @@ class PreventCard extends StatelessWidget {
                 color: Colors.white,
                 boxShadow: [
                   BoxShadow(
-                    offset: Offset(0, 8),
+                    offset: const Offset(0, 8),
                     blurRadius: 24,
                     color: kShadowColor,
                   ),
@@ -41,7 +41,7 @@ class PreventCard extends StatelessWidget {
             Positioned(
               left: 130,
               child: Container(
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                 height: 136,
                 width: MediaQuery.of(context).size.width - 170,
                 child: Column(
@@ -59,7 +59,7 @@ class PreventCard extends StatelessWidget {
                         text,
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 12,
                         ),
                       ),

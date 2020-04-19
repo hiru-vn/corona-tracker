@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
         ],
       ),
       bottomNavigationBar:
-          MyBottomNavigationBar(_bottomNavigationKey, _changePageByPress),
+          MyBottomNavigationBar(_bottomNavigationKey, _changePageByPress, color: Colors.blueAccent,),
     );
   }
 }
