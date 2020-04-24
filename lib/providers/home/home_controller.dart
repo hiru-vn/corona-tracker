@@ -6,7 +6,12 @@ class HomeController extends ChangeNotifier {
     logic = HomeLogic(this);
   }
 
+
   HomeLogic logic;
+  int cases;
+  int deaths;
+  int recovered;
+  bool isLoading = false;
 
   void refresh() {
     notifyListeners();

@@ -37,6 +37,7 @@ class Counter extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Text(
+
           "$number",
           style: TextStyle(
             fontSize: 40,
