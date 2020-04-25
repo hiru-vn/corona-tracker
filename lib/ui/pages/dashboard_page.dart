@@ -1,10 +1,6 @@
-
-
 import 'package:corona_tracker/json/countries.dart';
 import 'package:corona_tracker/providers/home/home_controller.dart';
-import 'package:corona_tracker/providers/home/home_logic.dart';
 import 'package:corona_tracker/services/api.dart';
-import 'package:corona_tracker/services/strings.dart';
 import 'package:corona_tracker/ui/reuseable/header_appbar.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
@@ -18,13 +14,9 @@ import 'package:provider/provider.dart';
 class DashboardPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_)=>HomeController(),
-      child: DashboardPageWidget(),
-    );
+    return DashboardPageWidget();
   }
 }
-
 
 class DashboardPageWidget extends StatefulWidget {
   @override
@@ -35,12 +27,12 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
   final _controller = ScrollController();
   double offset = 0;
   Future<List<Countries>> listCountries;
-  var _value;
+
   @override
   void initState() {
     super.initState();
     _controller.addListener(onScroll);
-    listCountries =  API.fetchData();
+    listCountries = API.fetchData();
   }
 
   @override
@@ -58,6 +50,13 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
   @override
   Widget build(BuildContext context) {
     final model = Provider.of<HomeController>(context);
+
+    final listItemMenu = <DropdownMenuItem<Countries>>[];
+    model.listCountries.forEach((item) => {
+          listItemMenu.add(
+            DropdownMenuItem<Countries>(child: Text(item.country), value: item),
+          )
+        });
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -87,37 +86,16 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                   SvgPicture.asset("assets/icons/maps-and-flags.svg"),
                   const SizedBox(width: 20),
                   Expanded(
-                    child: FutureBuilder(
-                      future: listCountries,
-                      builder: ( context,  snapshot) {
-                        if (snapshot.hasData) {
-                          List<Countries> arrCountries = snapshot.data;
-                          final List<DropdownMenuItem> listItemMenu = [];
-                           arrCountries.forEach((item)=>{
-                            listItemMenu.add(
-                              DropdownMenuItem<String>(
-                                child: Text(item.country),
-                                value: item.country
-                              ),
-                            )
-                          });
-                          return DropdownButton(
+                    child: model.listCountries.isNotEmpty
+                        ? DropdownButton<Countries>(
                             isExpanded: true,
                             underline: const SizedBox(),
                             icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                            value: _value,
+                            value: model.selectedCountry,
                             items: listItemMenu.toList(),
-                            onChanged: (  value ) {
-                              setState(() {
-                                _value = value;
-                                model.logic.updateDataByCountry(value);
-                              });
-                            },
-                          );
-                        }
-                        return const CircularProgressIndicator();
-                      },
-                    )
+                            onChanged: model.logic.updateDataByCountry,
+                          )
+                        : const CircularProgressIndicator(),
                   ),
                 ],
               ),
@@ -172,19 +150,19 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        Counter (
+                        Counter(
                           color: kInfectedColor,
-                          number: model.cases,
+                          number: model.selectedCountry?.cases,
                           title: "Infected",
                         ),
                         Counter(
                           color: kDeathColor,
-                          number: model.deaths,
+                          number: model.selectedCountry?.deaths,
                           title: "Deaths",
                         ),
                         Counter(
                           color: kRecovercolor,
-                          number: model.recovered,
+                          number: model.selectedCountry?.critical,
                           title: "Recovered",
                         ),
                       ],

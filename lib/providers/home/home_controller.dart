@@ -1,17 +1,18 @@
+import 'package:corona_tracker/json/countries.dart';
 import 'package:corona_tracker/providers/home/home_logic.dart';
 import 'package:flutter/material.dart';
 
 class HomeController extends ChangeNotifier {
   HomeController() {
     logic = HomeLogic(this);
+    logic.init();
   }
 
 
   HomeLogic logic;
-  int cases;
-  int deaths;
-  int recovered;
   bool isLoading = false;
+  List<Countries> listCountries = <Countries>[];
+  Countries selectedCountry;
 
   void refresh() {
     notifyListeners();

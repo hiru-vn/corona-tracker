@@ -5,33 +5,18 @@ import 'package:flutter/material.dart';
 
 class HomeLogic extends ChangeNotifier {
   HomeLogic(this._model);
-
-
-
   final HomeController _model;
 
-  Future getData() async {
-    API.fetchData();
-  }
-
-
-  Future updateDataByCountry(String countries) async {
-    var data = await API.fetchData();
-    _model.isLoading = true;
-    print(_model.isLoading);
-    _model..refresh();
-
-    for (var i in data) {
-      if (countries == i.country) {
-        _model.cases = i.cases;
-        _model.deaths = i.deaths;
-        _model.recovered = i.recovered;
-        print(_model.cases);
-      }
+  Future<void> init() async {
+    _model.listCountries = await API.fetchData();
+    if (_model.listCountries.isNotEmpty) {
+      _model.selectedCountry = _model.listCountries[0];
     }
-    _model.isLoading = false;
-     _model..refresh();
+    _model.refresh();
   }
 
-
+  void updateDataByCountry(Countries countries) async {
+    _model.selectedCountry = countries;
+    _model.refresh();
+  }
 }

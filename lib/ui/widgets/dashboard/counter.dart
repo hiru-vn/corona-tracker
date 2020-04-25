@@ -36,14 +36,13 @@ class Counter extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 10),
-        Text(
-
+        number!=null?Text(
           "$number",
           style: TextStyle(
             fontSize: 40,
             color: color,
           ),
-        ),
+        ):const CircularProgressIndicator(),
         Text(title, style: kSubTextStyle),
       ],
     );
