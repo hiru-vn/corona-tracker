@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
 class FirebaseMessageService {
+  
   FirebaseMessageService.getInstance() {
     if (_instance == null) {
       init();

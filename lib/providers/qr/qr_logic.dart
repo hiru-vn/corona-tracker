@@ -3,6 +3,6 @@ import 'package:flutter/material.dart';
 
 class QrLogic extends ChangeNotifier{
   QrLogic(this._model);
-
+  //NEW FEATURE 
   final QrController _model;
 }

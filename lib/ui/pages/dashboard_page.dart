@@ -1,3 +1,6 @@
+import 'package:corona_tracker/json/countries.dart';
+import 'package:corona_tracker/providers/home/home_controller.dart';
+import 'package:corona_tracker/services/api.dart';
 import 'package:corona_tracker/ui/reuseable/header_appbar.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
@@ -6,20 +9,30 @@ import 'package:corona_tracker/ui/widgets/dashboard/prevent_card.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/symtom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
-class DashboardPage extends StatefulWidget {
+class DashboardPage extends StatelessWidget {
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  Widget build(BuildContext context) {
+    return DashboardPageWidget();
+  }
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class DashboardPageWidget extends StatefulWidget {
+  @override
+  _DashboardPageStateWidget createState() => _DashboardPageStateWidget();
+}
+
+class _DashboardPageStateWidget extends State<DashboardPageWidget> {
   final _controller = ScrollController();
   double offset = 0;
+  Future<List<Countries>> listCountries;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(onScroll);
+    listCountries = API.fetchData();
   }
 
   @override
@@ -36,6 +49,15 @@ class _DashboardPageState extends State<DashboardPage> {
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<HomeController>(context);
+
+    final listItemMenu = <DropdownMenuItem<Countries>>[];
+    model.listCountries.forEach((item) => {
+          listItemMenu.add(
+            DropdownMenuItem<Countries>(child: Text(item.country), value: item),
+          )
+        });
+
     return Scaffold(
       body: SingleChildScrollView(
         controller: _controller,
@@ -64,24 +86,16 @@ class _DashboardPageState extends State<DashboardPage> {
                   SvgPicture.asset("assets/icons/maps-and-flags.svg"),
                   const SizedBox(width: 20),
                   Expanded(
-                    child: DropdownButton(
-                      isExpanded: true,
-                      underline: const SizedBox(),
-                      icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                      value: "Indonesia",
-                      items: [
-                        'Indonesia',
-                        'Bangladesh',
-                        'United States',
-                        'Japan'
-                      ].map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                      onChanged: (value) {},
-                    ),
+                    child: model.listCountries.isNotEmpty
+                        ? DropdownButton<Countries>(
+                            isExpanded: true,
+                            underline: const SizedBox(),
+                            icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                            value: model.selectedCountry,
+                            items: listItemMenu.toList(),
+                            onChanged: model.logic.updateDataByCountry,
+                          )
+                        : const CircularProgressIndicator(),
                   ),
                 ],
               ),
@@ -138,17 +152,17 @@ class _DashboardPageState extends State<DashboardPage> {
                       children: <Widget>[
                         Counter(
                           color: kInfectedColor,
-                          number: 1046,
+                          number: model.selectedCountry?.cases,
                           title: "Infected",
                         ),
                         Counter(
                           color: kDeathColor,
-                          number: 87,
+                          number: model.selectedCountry?.deaths,
                           title: "Deaths",
                         ),
                         Counter(
                           color: kRecovercolor,
-                          number: 46,
+                          number: model.selectedCountry?.critical,
                           title: "Recovered",
                         ),
                       ],
