@@ -18,7 +18,7 @@ class LoginLogic extends ChangeNotifier{
         codeAutoRetrievalTimeout: _codeAutoRetrievalTimeout);
   }
 
-  void logout() {}
+  void logout() { }
 
   void _codeSent(String verificationId, [int forceResendingToken]) {
     _model.actualCode = verificationId;
