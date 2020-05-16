@@ -3,6 +3,7 @@ import 'package:corona_tracker/providers/login/login_controller.dart';
 import 'package:corona_tracker/providers/qr/qr_controller.dart';
 import 'package:corona_tracker/ui/pages/home_page.dart';
 import 'package:corona_tracker/ui/pages/login_page.dart';
+import 'package:corona_tracker/ui/pages/notification_page.dart';
 import 'package:corona_tracker/ui/pages/qr_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +17,7 @@ class Views {
   static const String loginPage = 'loginPage';
   static const String homePage = 'homePage';
   static const String qrPage = 'qrPage';
+  static const String notificationPage = 'notificationPage';
 }
 
 //
@@ -36,6 +38,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
               create: (_) => QrController(), child: QrPage()));
+    case Views.notificationPage:
+      return CupertinoPageRoute(
+          builder: (context) => NotificationPage()
+      );
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

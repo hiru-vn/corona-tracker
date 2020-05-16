@@ -17,6 +17,7 @@ class HomeLogic extends ChangeNotifier {
 
   void updateDataByCountry(Countries countries) async {
     _model.selectedCountry = countries;
+    print(_model.selectedCountry.cases );
     _model.refresh();
   }
 }

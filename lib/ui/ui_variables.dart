@@ -11,6 +11,7 @@ const kRecovercolor = Color(0xFF36C12C);
 const kPrimaryColor = Color(0xFF3382CC);
 final kShadowColor = const Color(0xFFB7B7B7).withOpacity(.16);
 final kActiveShadowColor = const Color(0xFF4056C6).withOpacity(.15);
+final kAbility = const Color(0xFFF78115);
 
 // Text Style
 const kHeadingTextStyle = TextStyle(

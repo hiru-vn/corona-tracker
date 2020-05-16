@@ -52,9 +52,10 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
     final model = Provider.of<HomeController>(context);
 
     final listItemMenu = <DropdownMenuItem<Countries>>[];
+
     model.listCountries.forEach((item) => {
           listItemMenu.add(
-            DropdownMenuItem<Countries>(child: Text(item.country), value: item),
+            DropdownMenuItem<Countries>(child: Text(item.country), value: item,),
           )
         });
 
@@ -147,25 +148,30 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Counter(
-                          color: kInfectedColor,
-                          number: model.selectedCountry?.cases,
-                          title: "Infected",
-                        ),
-                        Counter(
-                          color: kDeathColor,
-                          number: model.selectedCountry?.deaths,
-                          title: "Deaths",
-                        ),
-                        Counter(
-                          color: kRecovercolor,
-                          number: model.selectedCountry?.critical,
-                          title: "Recovered",
-                        ),
-                      ],
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          Counter(
+                            color: kInfectedColor,
+                            number: model.selectedCountry?.cases,
+                            title: "Infected",
+                          ),
+                          Counter(
+                            color: kDeathColor,
+                            number: model.selectedCountry?.deaths,
+                            title: "Deaths",
+                          ),
+                          Counter(
+                            color: kRecovercolor,
+                            number: model.selectedCountry?.critical,
+                            title: "Recovered",
+                          ),
+
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),

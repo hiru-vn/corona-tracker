@@ -43,7 +43,7 @@ class _MyHeaderState extends State<MyHeader> {
             GestureDetector(
               onTap: () {
               },
-              child: Image.asset("assets/images/menu.svg"),
+              child: Image.asset("assets/icons/menu.svg"),
             ),
             const SizedBox(height: 20),
             Expanded(
