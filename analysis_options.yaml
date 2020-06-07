@@ -1,4 +1,7 @@
 include: package:pedantic/analysis_options.yaml
+analyzer:
+  exclude:
+    - lib/src/locations.g.dart
 
 linter:
   rules:
@@ -151,3 +154,4 @@ linter:
     - use_to_and_as_if_applicable
     - valid_regexps
     - void_checks
+    

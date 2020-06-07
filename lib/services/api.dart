@@ -2,8 +2,6 @@ import 'package:corona_tracker/json/countries.dart';
 import 'package:dio/dio.dart';
 
 class API {
-
-
   static Future<List<Countries>> fetchData() async {
     List<Countries> arrCountries = [];
     var dio = Dio();

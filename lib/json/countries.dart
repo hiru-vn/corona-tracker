@@ -9,7 +9,8 @@ class Countries {
   int critical;
 
   Countries(
-      {this.country,
+      {
+        this.country,
         this.cases,
         this.todayCases,
         this.deaths,

@@ -33,6 +33,11 @@ dependencies:
   qr_code_scanner: ^0.0.12
   flutter_svg: ^0.17.4
   google_maps_flutter: ^0.4.0
+  geolocator: ^5.3.1
+  # Add the following two lines
+  http: ^0.12.0+1
+  json_serializable: ^3.3.0
+  libphonenumber: ^1.0.1
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -40,8 +45,9 @@ dependencies:
   cupertino_icons: ^0.1.2
 
 dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  pedantic: ^1.9.0
+  build_runner: ^1.10.0
+  
 
 
 # For information on the generic Dart part of this file, see the

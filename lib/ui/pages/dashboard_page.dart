@@ -66,8 +66,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
           children: <Widget>[
             MyHeader(
               image: "assets/icons/Drcorona.svg",
-              textTop: "All you need",
-              textBottom: "is stay at home.",
+              textTop: "Hãy ở nhà",
+              textBottom: "để bảo vệ bản thân\nvà mọi người",
+              
               offset: offset,
             ),
             Container(
@@ -112,11 +113,11 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                         text: TextSpan(
                           children: [
                             TextSpan(
-                              text: "Case Update\n",
+                              text: "Cập nhật ca nhiễm bệnh\n",
                               style: kTitleTextstyle,
                             ),
                             TextSpan(
-                              text: "Newest update March 28",
+                              text: "Cập nhật mới nhất ngày 28 tháng 3",
                               style: TextStyle(
                                 color: kTextLightColor,
                               ),
@@ -126,7 +127,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                       ),
                       const Spacer(),
                       Text(
-                        "See details",
+                        "Chi tiết",
                         style: TextStyle(
                           color: kPrimaryColor,
                           fontWeight: FontWeight.w600,
@@ -136,7 +137,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    padding: const EdgeInsets.all(20),
+                    padding: const EdgeInsets.fromLTRB(50,20,50,20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white,
@@ -152,24 +153,32 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                       fit: BoxFit.contain,
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: <Widget>[
-                          Counter(
-                            color: kInfectedColor,
-                            number: model.selectedCountry?.cases,
-                            title: "Infected",
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Counter(
+                              color: kInfectedColor,
+                              number: model.selectedCountry?.cases,
+                              title: "Bị lây nhiễm",
+                            ),
                           ),
-                          Counter(
-                            color: kDeathColor,
-                            number: model.selectedCountry?.deaths,
-                            title: "Deaths",
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Counter(
+                              color: kDeathColor,
+                              number: model.selectedCountry?.deaths,
+                              title: "Tử vong",
+                            ),
                           ),
-                          Counter(
-                            color: kRecovercolor,
-                            number: model.selectedCountry?.critical,
-                            title: "Recovered",
+                          Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Counter(
+                              color: kRecovercolor,
+                              number: model.selectedCountry?.critical,
+                              title: "Bình phục",
+                            ),
                           ),
-
                         ],
                       ),
                     ),
@@ -179,11 +188,11 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
                       Text(
-                        "Spread of Virus",
+                        "Lây lan Virus",
                         style: kTitleTextstyle,
                       ),
                       Text(
-                        "See details",
+                        "Chi tiết",
                         style: TextStyle(
                           color: kPrimaryColor,
                           fontWeight: FontWeight.w600,
@@ -217,7 +226,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Symptoms",
+                        "Triệu chứng",
                         style: kTitleTextstyle,
                       ),
                       const SizedBox(height: 20),
@@ -228,34 +237,34 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                           children: <Widget>[
                             const SymptomCard(
                               image: "assets/images/headache.png",
-                              title: "Headache",
+                              title: "Đau đầu",
                               isActive: true,
                             ),
                             const SymptomCard(
                               image: "assets/images/caugh.png",
-                              title: "Caugh",
+                              title: "Cảm lạnh",
                             ),
                             const SymptomCard(
                               image: "assets/images/fever.png",
-                              title: "Fever",
+                              title: "Sốt",
                             ),
                           ],
                         ),
                       ),
                       const SpacingBox(height: 3),
-                      Text("Prevention", style: kTitleTextstyle),
+                      Text("Tự bảo vệ bản thân", style: kTitleTextstyle),
                       const SizedBox(height: 20),
                       const PreventCard(
                         text:
                             "Since the start of the coronavirus outbreak some places have fully embraced wearing facemasks",
                         image: "assets/images/wear_mask.png",
-                        title: "Wear face mask",
+                        title: "Đeo khẩu trang",
                       ),
                       const PreventCard(
                         text:
                             "Since the start of the coronavirus outbreak some places have fully embraced wearing facemasks",
                         image: "assets/images/wash_hands.png",
-                        title: "Wash your hands",
+                        title: "Rửa tay",
                       ),
                       const SizedBox(height: 50),
                     ],

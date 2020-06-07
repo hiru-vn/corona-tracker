@@ -1,15 +1,13 @@
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'loginAPI.dart';
 
 
-class LoginPage extends StatefulWidget {
+class RegisterPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
 }
 
-class _RegisterPageState extends State<LoginPage> {
+class _RegisterPageState extends State<RegisterPage> {
 
   TextEditingController _nameController = new TextEditingController();
   TextEditingController _emailController = new TextEditingController();
@@ -119,7 +117,7 @@ class _RegisterPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 52,
                   child: RaisedButton(
-                    onPressed: clicksignup,
+                    onPressed: null,
                     child: Text(
                       "Signup",
                       style: TextStyle(color: Colors.white, fontSize: 18),
@@ -149,19 +147,5 @@ class _RegisterPageState extends State<LoginPage> {
         ),
       ),
     );
-  }
-  void clicksignup()
-  {
-    loginapi(_nameController.text,_phoneController.text,_emailController.text,_passController.text);
-  }
-  static loginapi(String name, String phonenumber, String email, String password) async {
-    var dio = Dio();
-    const  baseURL = "https://localhost:3000/user/sign-up";
-    var data = {
-      "fullname" : email,
-      "username" : name,
-      "password" : password,
-    };
-    var res = await dio.post(baseURL,data: data);
   }
 }
