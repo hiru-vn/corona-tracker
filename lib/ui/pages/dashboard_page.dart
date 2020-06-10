@@ -67,8 +67,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
             MyHeader(
               image: "assets/icons/Drcorona.svg",
               textTop: "Hãy ở nhà",
-              textBottom: "để bảo vệ bản thân\nvà mọi người",
-              
+              textBottom: "để bảo vệ bản thân\nvà mọi người",        
               offset: offset,
             ),
             Container(
