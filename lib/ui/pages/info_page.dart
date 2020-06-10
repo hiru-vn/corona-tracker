@@ -187,7 +187,7 @@ class InfoPage extends StatelessWidget {
                     RaisedButton(shape: const RoundedRectangleBorder(
 
                     ), onPressed: () {
-
+                      navigatorKey.currentState.pushNamed(Views.qrPage);
                     },
                       child: Text("Quét QR",style: TextStyle(color: Colors.black),),)
 

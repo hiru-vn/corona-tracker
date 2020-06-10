@@ -1,3 +1,4 @@
+import 'package:corona_tracker/moduleQR/scanqr_page.dart';
 import 'package:corona_tracker/providers/home/home_controller.dart';
 import 'package:corona_tracker/providers/login/login_controller.dart';
 import 'package:corona_tracker/providers/qr/qr_controller.dart';
@@ -37,7 +38,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Views.qrPage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => QrController(), child: QrPage()));
+              create: (_) => QrController(), child: Scanqrpage()));
     case Views.notificationPage:
       return CupertinoPageRoute(
           builder: (context) => NotificationPage()

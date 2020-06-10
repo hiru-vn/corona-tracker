@@ -38,7 +38,15 @@ dependencies:
   http: ^0.12.0+1
   json_serializable: ^3.3.0
   libphonenumber: ^1.0.1
-
+  rxdart: ^0.24.0
+  package_info: ^0.4.0+14
+  flutter_spinkit: ^4.1.2
+  google_fonts: ^0.3.9
+  gql: ^0.12.2
+  graphql_flutter: ^3.0.1
+  artemis: '>=5.0.0 <6.0.0'
+  audioplayers: ^0.14.0
+  rflutter_alert: ^1.0.3
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
