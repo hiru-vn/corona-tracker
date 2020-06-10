@@ -156,12 +156,17 @@ class _RegisterPageState extends State<LoginPage> {
   }
   static loginapi(String name, String phonenumber, String email, String password) async {
     var dio = Dio();
-    const  baseURL = "https://localhost:3000/user/sign-up";
+    final  baseURL = 'https://127.0.0.1:3000/user/sign-up';
     var data = {
       "fullname" : email,
       "username" : name,
       "password" : password,
     };
-    var res = await dio.post(baseURL,data: data);
+    try {
+      var res = await dio.post(baseURL,data: data);
+      print(res);
+    } catch (e) {
+      print(e);
+    }
   }
 }
