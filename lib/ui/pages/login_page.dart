@@ -2,7 +2,7 @@ import 'package:corona_tracker/providers/home/home_controller.dart';
 import 'package:corona_tracker/services/navigate_services.dart';
 import 'package:corona_tracker/ui/pages/home_page.dart';
 import 'package:corona_tracker/ui/pages/register_page.dart';
-import 'package:corona_tracker/ui/widgets/info/notification.dart';
+import 'package:corona_tracker/globals.dart' as globals;
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
