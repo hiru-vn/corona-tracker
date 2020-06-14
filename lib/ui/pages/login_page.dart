@@ -1,3 +1,4 @@
+import 'package:corona_tracker/base_config/src/spref/spref.dart';
 import 'package:corona_tracker/providers/home/home_controller.dart';
 import 'package:corona_tracker/services/navigate_services.dart';
 import 'package:corona_tracker/ui/pages/home_page.dart';
@@ -8,6 +9,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+
+import '../../globals.dart';
+import '../../main.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -62,13 +66,14 @@ class _RegisterPageState extends State<LoginPage> {
                           style: TextStyle(fontSize: 18, color: Colors.black),
                           decoration: InputDecoration(
                               labelText: "Email",
-                              errorText:
-                                  userinvalid ? _usernameErr : null,
-                              prefixIcon:
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Container(width: 30, child: Image.asset("assets/images/gmail.png")),
-                                  ),
+                              errorText: userinvalid ? _usernameErr : null,
+                              prefixIcon: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                    width: 30,
+                                    child:
+                                        Image.asset("assets/images/gmail.png")),
+                              ),
                               border: OutlineInputBorder(
                                   borderSide:
                                       BorderSide(color: Colors.black, width: 1),
@@ -82,11 +87,11 @@ class _RegisterPageState extends State<LoginPage> {
                         obscureText: true,
                         style: TextStyle(fontSize: 18, color: Colors.black),
                         decoration: InputDecoration(
-                            errorText:
-                                passinvalid ? _passwordErr : null,
+                            errorText: passinvalid ? _passwordErr : null,
                             labelText: "Mật khẩu",
-                            prefixIcon:
-                                Container(width: 50, child: Image.asset("assets/images/key.png")),
+                            prefixIcon: Container(
+                                width: 50,
+                                child: Image.asset("assets/images/key.png")),
                             border: OutlineInputBorder(
                                 borderSide:
                                     BorderSide(color: Colors.black, width: 1),
@@ -104,7 +109,6 @@ class _RegisterPageState extends State<LoginPage> {
                       "Đăng nhập",
                       style: TextStyle(color: Colors.white, fontSize: 18),
                     ),
-                  
                     color: Color(0xff3277D8),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.all(Radius.circular(6))),
@@ -161,58 +165,56 @@ class _RegisterPageState extends State<LoginPage> {
   void clickSignin() {
     setState(() {
       Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
       RegExp regex = new RegExp(pattern);
-      if(!regex.hasMatch(_emailController.text.toString())|| _emailController.text.length<6)
-      {
-         userinvalid=true;
-      }
-      else userinvalid =false;
-      if(_passController.text.length<6)
-      {
-        passinvalid=true;
-      }
-      else passinvalid=false;
+      if (!regex.hasMatch(_emailController.text.toString()) ||
+          _emailController.text.length < 6) {
+        userinvalid = true;
+      } else
+        userinvalid = false;
+      if (_passController.text.length < 6) {
+        passinvalid = true;
+      } else
+        passinvalid = false;
 
-      if(!userinvalid && !passinvalid)
-      {
+      if (!userinvalid && !passinvalid) {
         signin();
         if (checkSingIn == true) {
-        Alert(
-          context: context,
-          type: AlertType.success,
-          title: "Đăng nhập thành công",
-          desc: "bây giờ bạn có thể sử dụng các tính năng",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "Xong",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChangeNotifierProvider(
-                          create: (_) => HomeController(), child: HomePage()))),
-              width: 120,
-            )
-          ],
-        ).show();
-        ;
-        ;
-      } else {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Đăng nhập thất bại",
-          desc: "Vui lòng kiểm tra lại Email hoặc mật khẩu",
-        ).show();
-        ;
-        ;
-      }
+          Alert(
+            context: context,
+            type: AlertType.success,
+            title: "Đăng nhập thành công",
+            desc: "bây giờ bạn có thể sử dụng các tính năng",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "Xong",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                            create: (_) => HomeController(),
+                            child: HomePage()))),
+                width: 120,
+              )
+            ],
+          ).show();
+          ;
+          ;
+        } else {
+          Alert(
+            context: context,
+            type: AlertType.error,
+            title: "Đăng nhập thất bại",
+            desc: "Vui lòng kiểm tra lại Email hoặc mật khẩu",
+          ).show();
+          ;
+          ;
         }
-      
-      });
+      }
+    });
   }
 
   void signin() {
@@ -220,16 +222,22 @@ class _RegisterPageState extends State<LoginPage> {
   }
 
   void loginapi(String username, String password) async {
-    var dio = Dio();
-    Response response;
-    const baseURL = "http://127.0.0.1:3000/user/sign-in";
-    var data = {"username": username, "password": password};
-    response = await dio.post(baseURL, data: data);
-    print(response.data.toString());
-    print(response.statusCode);
-    if (response.statusCode == 200) {
+    try {
+      var dio = Dio();
+      Response response;
+      const baseURL = baseLocalHost +"user/sign-in";
+      var data = {"username": username, "password": password};
+      response = await dio.post(baseURL, data: data);
+      print(response.data.toString());
       print(response.statusCode);
-      checkSingIn = true;
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        checkSingIn = true;
+        SPref.instance.set('userId', response.data["id"]);
+        SPref.instance.set('userName', response.data["username"]);
+      }
+    } catch (e) {
+      print(e);
     }
   }
 }
