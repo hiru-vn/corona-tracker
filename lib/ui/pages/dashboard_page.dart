@@ -1,6 +1,7 @@
 import 'package:corona_tracker/json/countries.dart';
 import 'package:corona_tracker/providers/home/home_controller.dart';
 import 'package:corona_tracker/services/api.dart';
+import 'package:corona_tracker/ui/pages/detailStore.dart';
 import 'package:corona_tracker/ui/reuseable/header_appbar.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
@@ -125,11 +126,14 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                         ),
                       ),
                       const Spacer(),
-                      Text(
-                        "Chi tiết",
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontWeight: FontWeight.w600,
+                      FlatButton(
+                        onPressed: () =>Navigator.push(context, MaterialPageRoute(builder: (context){return DetailStore();})),
+                        child: Text(
+                          "Chi tiết",
+                          style: TextStyle(
+                            color: kPrimaryColor,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
                     ],

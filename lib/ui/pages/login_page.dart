@@ -225,8 +225,6 @@ class _RegisterPageState extends State<LoginPage> {
     const baseURL = "http://127.0.0.1:3000/user/sign-in";
     var data = {"username": username, "password": password};
     response = await dio.post(baseURL, data: data);
-    print(response.data.toString());
-    print(response.statusCode);
     if (response.statusCode == 200) {
       print(response.statusCode);
       checkSingIn = true;
