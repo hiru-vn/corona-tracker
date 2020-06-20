@@ -9,6 +9,7 @@ import 'package:corona_tracker/ui/pages/qr_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:corona_tracker/ui/pages/detailStore.dart';
 
 // this key use as navigator
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -19,6 +20,7 @@ class Views {
   static const String homePage = 'homePage';
   static const String qrPage = 'qrPage';
   static const String notificationPage = 'notificationPage';
+  static const String detailstore = 'detailstore';
 }
 
 //
@@ -30,7 +32,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Views.loginPage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => LoginController(), child: LoginPage()));
+              create: (_) => LoginController(), child: LoginPage()));    
     case Views.homePage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:corona_tracker/json/address.dart';
 import 'package:intl/intl.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -298,15 +299,53 @@ class _RegisterPageState extends State<RegisterPage> {
       if(_phoneController.text.length!=10)
       phoneinvalid = true;
       else phoneinvalid = false;
+
+      if(checkRegister(_emailController.text,_passController.text)==false)
+      {
+        Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Đăng nhập thất bại",
+          desc: "Vui lòng kiểm tra lại Email hoặc mật khẩu",
+        ).show();
+      }
     });
   }
 
-  void clickSignupForUser() {
+  Future<bool> clickSignupForUser() async {
     var dio = Dio();
     Response response;
     String baseURL = "http://127.0.0.1:3000/user/sign-up";
-    var data = {};
+    var data = {
+      "fullname": _nameController.text,
+      "username" : _emailController.text,
+      "password" : _passController.text
+    };
+    response = await dio.post(baseURL, data: data);
+    if(response.statusCode==200)
+    {
+    }
   }
 
-  void updateForUser() {}
+  Future<bool> checkRegister (String email, String password)
+  async {
+    var dio = Dio();
+    Response response;
+    String baseURL = "http://127.0.0.1:3000/user/sign-in";
+    var data ={
+      "username" : email,
+      "password" : password
+    };
+    response = await dio.post(baseURL, data:data);
+    print(response.data.toString());
+    if(response.statusCode==200)
+    return false;
+    else return true;
+  }
+
+  void updateForUser(String phone, String tinhtp, String diachi, ) {
+    var dio =Dio();
+    Response response;
+  }
+
 }

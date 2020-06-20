@@ -6,4 +6,4 @@ library Users;
   int phone;
 	int cityCode;
   String address;
-  const baseLocalHost = 'http://192.168.2.245:3000/';
+  const baseLocalHost = 'http://10.42.0.1:3000/';

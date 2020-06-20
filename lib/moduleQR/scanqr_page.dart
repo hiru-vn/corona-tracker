@@ -107,10 +107,8 @@ class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
             ),
             onPressed: () {
               Future.delayed(const Duration(microseconds: 300), () {
-                // TODO: fetch API tại đây
-                String qrcode = event.data;
-                // TODO: fetch API tại đây
-                Navigator.pop(context);
+                String idstore = event.data;
+                // nav to detail
                 Navigator.pop(context);
               });
             },
