@@ -1,5 +1,5 @@
 import 'package:corona_tracker/base_config/base_config.dart';
-import 'package:corona_tracker/globals.dart';
+import 'package:corona_tracker/globals.dart' as globals;
 import 'package:dio/dio.dart';
 
 import 'data/scanqr_repo.dart';
@@ -30,7 +30,7 @@ class ScanqrBloc extends BaseBloc with ChangeNotifier {
     try {
       var dio = Dio();
       Response response;
-      const baseURL = baseLocalHost + "userstore/create";
+      String baseURL =  globals.baseURL + "userstore/create";
       int uid = await SPref.instance.get('userId');
       var data = {
         "timein": "20:22 23/2/1999",
