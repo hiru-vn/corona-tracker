@@ -11,6 +11,7 @@ import 'package:corona_tracker/ui/widgets/dashboard/symtom_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import 'package:corona_tracker/globals.dart' as globals;
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -34,6 +35,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
     super.initState();
     _controller.addListener(onScroll);
     listCountries = API.fetchData();
+    print(globals.id);
   }
 
   @override

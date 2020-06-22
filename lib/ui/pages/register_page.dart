@@ -1,10 +1,8 @@
 import 'package:dio/dio.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:corona_tracker/json/address.dart';
-import 'package:intl/intl.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:corona_tracker/globals.dart' as globals;
 
 class RegisterPage extends StatefulWidget {
   @override
@@ -30,6 +28,8 @@ class _RegisterPageState extends State<RegisterPage> {
   DateTime _dateTime;
   final List<Map> _addressVn = AddressVn.getJsonData();
   String _mySelection;
+  bool isRegister = true;
+  String cityCode;
 
   get parsedJson => null;
   @override
@@ -199,6 +199,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextField(
+                              controller: _tamtruController,
                               style:
                                   TextStyle(fontSize: 18, color: Colors.black),
                               decoration: InputDecoration(
@@ -256,7 +257,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       width: 250,
                       height: 52,
                       child: RaisedButton(
-                        onPressed: checkregister,
+                        onPressed: _onClickRegister,
                         child: Text(
                           "Đăng kí",
                           style: TextStyle(color: Colors.white, fontSize: 18),
@@ -278,7 +279,8 @@ class _RegisterPageState extends State<RegisterPage> {
     });
   }
 
-  void checkregister() {
+  void checkVariable()
+  {
     setState(() {
       Pattern pattern =
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
@@ -299,53 +301,84 @@ class _RegisterPageState extends State<RegisterPage> {
       if(_phoneController.text.length!=10)
       phoneinvalid = true;
       else phoneinvalid = false;
-
-      if(checkRegister(_emailController.text,_passController.text)==false)
-      {
-        Alert(
-          context: context,
-          type: AlertType.error,
-          title: "Đăng nhập thất bại",
-          desc: "Vui lòng kiểm tra lại Email hoặc mật khẩu",
-        ).show();
-      }
     });
   }
 
-  Future<bool> clickSignupForUser() async {
-    var dio = Dio();
+  void _onClickRegister() async {
+    checkVariable();
+    try{
+      var dio = Dio();
     Response response;
-    String baseURL = "http://127.0.0.1:3000/user/sign-up";
-    var data = {
-      "fullname": _nameController.text,
+    String baseURL = globals.baseURL+"/user/sign-in";
+    var data =
+    {
       "username" : _emailController.text,
       "password" : _passController.text
     };
-    response = await dio.post(baseURL, data: data);
+    response = await dio.post(baseURL, data:data);
     if(response.statusCode==200)
     {
+      Alert(
+          context: context,
+          type: AlertType.error,
+          title: "Đăng kí thất bại",
+          desc: "Tài khoản đã tồn tại",
+        ).show();
+    }
+    }
+    catch(e){ 
+      var dio = Dio();
+      Response response;
+      String baseURL = globals.baseURL+"/user/sign-up";
+      var data = 
+      {
+      "fullname": _nameController.text,
+      "username" : _emailController.text,
+      "password" : _passController.text
+      };
+      response = await dio.post(baseURL, data: data);
+      globals.id = response.data['data']['id'];
+      updateForUser();
+      
     }
   }
-
-  Future<bool> checkRegister (String email, String password)
-  async {
+  void updateForUser() 
+  async{
+    String cityCode;
+    switch (_mySelection) {
+      case "Thành phố Cần Thơ": cityCode = "92";
+      break;
+      case "Thành phố Hà Nội" :cityCode = "1";     
+      break;
+      case "Thành phố Hải Phòng": cityCode = "31";
+      break;
+      case "Thành phố Hồ Chí Minh" :cityCode = "79";     
+      break;
+      case "Thành phố Đà Nẵng": cityCode = "48";
+      break;
+      case "Tỉnh An Giang" :cityCode = "89";     
+      break;
+      case "Tỉnh Bà Rịa - Vũng Tàu": cityCode = "77";
+      break;
+      case "Tỉnh Bình Dương" :cityCode = "74";     
+      break;
+        break;
+      default:
+    }
+    print(_tinhthanhphoController.text);
     var dio = Dio();
     Response response;
-    String baseURL = "http://127.0.0.1:3000/user/sign-in";
-    var data ={
-      "username" : email,
-      "password" : password
+    String baseURL = globals.baseURL+"/user/update";
+    var data =
+    {
+      "id" : globals.id,
+      "phone" : _phoneController.text,
+      "yearOfBirth" : _dateTime.year,
+      "cityCode" : cityCode,
+      "address" : _tamtruController.text
     };
+    print(data.toString());
     response = await dio.post(baseURL, data:data);
     print(response.data.toString());
-    if(response.statusCode==200)
-    return false;
-    else return true;
   }
-
-  void updateForUser(String phone, String tinhtp, String diachi, ) {
-    var dio =Dio();
-    Response response;
-  }
-
 }
