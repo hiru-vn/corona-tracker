@@ -11,6 +11,9 @@ import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../../globals.dart';
+import '../../main.dart';
+
 class LoginPage extends StatefulWidget {
   @override
   _RegisterPageState createState() => _RegisterPageState();
@@ -144,6 +147,7 @@ class _RegisterPageState extends State<LoginPage> {
   {
     setState(() {
       Pattern pattern =
+<<<<<<< HEAD
         r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regex = new RegExp(pattern);
     if (!regex.hasMatch(_emailController.text.toString()) ||
@@ -187,6 +191,80 @@ class _RegisterPageState extends State<LoginPage> {
           desc: "Vui lòng kiểm tra tài khoản",
         ).show();
       }
+=======
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp(pattern);
+      if (!regex.hasMatch(_emailController.text.toString()) ||
+          _emailController.text.length < 6) {
+        userinvalid = true;
+      } else
+        userinvalid = false;
+      if (_passController.text.length < 6) {
+        passinvalid = true;
+      } else
+        passinvalid = false;
+
+      if (!userinvalid && !passinvalid) {
+        signin();
+        if (checkSingIn == true) {
+          Alert(
+            context: context,
+            type: AlertType.success,
+            title: "Đăng nhập thành công",
+            desc: "bây giờ bạn có thể sử dụng các tính năng",
+            buttons: [
+              DialogButton(
+                child: Text(
+                  "Xong",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+                onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ChangeNotifierProvider(
+                            create: (_) => HomeController(),
+                            child: HomePage()))),
+                width: 120,
+              )
+            ],
+          ).show();
+          ;
+          ;
+        } else {
+          Alert(
+            context: context,
+            type: AlertType.error,
+            title: "Đăng nhập thất bại",
+            desc: "Vui lòng kiểm tra lại Email hoặc mật khẩu",
+          ).show();
+          ;
+          ;
+        }
+      }
+    });
+  }
+
+  void signin() {
+    loginapi(_emailController.text, _passController.text);
+  }
+
+  void loginapi(String username, String password) async {
+    try {
+      var dio = Dio();
+      Response response;
+      const baseURL = baseLocalHost +"user/sign-in";
+      var data = {"username": username, "password": password};
+      response = await dio.post(baseURL, data: data);
+      print(response.data.toString());
+      if (response.statusCode == 200) {
+        print(response.statusCode);
+        checkSingIn = true;
+        SPref.instance.set('userId', response.data["id"]);
+        SPref.instance.set('userName', response.data["username"]);
+      }
+    } catch (e) {
+      print(e);
+>>>>>>> eb346768d7d29b3312cb31dc41c5ec354e9016ab
     }
   }
 }

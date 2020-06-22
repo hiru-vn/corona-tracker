@@ -1,6 +1,10 @@
+import 'package:audioplayers/audio_cache.dart';
+import 'package:corona_tracker/moduleQR/events/qrdetected_event.dart';
+import 'package:corona_tracker/moduleQR/widgets/header_qr.dart';
 import 'package:corona_tracker/services/navigate_services.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
+import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:corona_tracker/base_config/base_config.dart';
 import 'package:corona_tracker/base_widget/base_widget.dart';
@@ -10,7 +14,6 @@ import 'data/scanqr_srv.dart';
 import 'events/scanqrFail_event.dart';
 import 'events/scanqrSuccess_event.dart';
 import 'scanqr_bloc.dart';
-import 'widgets/qrcode_widget.dart';
 
 class Scanqrpage extends StatelessWidget {
   @override
@@ -47,6 +50,9 @@ class ScanqrBody extends StatefulWidget {
 class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
   ScanqrBloc scanqrBloc;
   QRViewController controller;
+  final GlobalKey qrKey = GlobalKey(debugLabel: 'QR');
+  final AudioCache audioCache = AudioCache();
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   void didChangeDependencies() {
@@ -101,10 +107,8 @@ class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
             ),
             onPressed: () {
               Future.delayed(const Duration(microseconds: 300), () {
-                // TODO: fetch API tại đây
-                String qrcode = event.data;
-                // TODO: fetch API tại đây
-                Navigator.pop(context);
+                String idstore = event.data;
+                // nav to detail
                 Navigator.pop(context);
               });
             },
@@ -129,11 +133,72 @@ class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
     }
   }
 
+  _playCheckSound() async {
+    await audioCache.play("assets/images/beep.mp3");
+  }
+
+  _onQrViewCreated(QRViewController controller) async {
+    this.controller = controller;
+    this.controller.scannedDataStream.listen((scanData) {
+      print('scan data ${scanData.toString()}');
+      this.controller.pauseCamera();
+      _playCheckSound();
+      scanqrBloc.event
+          .add(QrdetectedEvent(scanData)); // return a qr value in text
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoadingTask(
       bloc: scanqrBloc,
-      child: QrcodeWidget(scanqrBloc, controller, handleEvent),
+      child: BlocListener<ScanqrBloc>(
+        listener: handleEvent,
+        child: Stack(
+          key: _scaffoldKey,
+          children: <Widget>[
+            Align(
+              alignment: Alignment.center,
+              child: QRView(
+                key: qrKey,
+                onQRViewCreated: (controller) => _onQrViewCreated(controller),
+                overlay: QrScannerOverlayShape(
+                  borderColor: Colors.red,
+                  borderRadius: 10,
+                  borderLength: 30,
+                  borderWidth: 0,
+                  cutOutSize: 300,
+                ),
+              ),
+            ),
+            Positioned(
+              top: SizeConfig.heightMultiplier * 6,
+              child: Container(
+                width: SizeConfig.widthMultiplier * 100,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    SizedBox(height: SizeConfig.heightMultiplier * 15),
+                    Text(
+                      CustomString.requestQrCodeScanningVn,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: SizeConfig.textMultiplier * 2.5,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Positioned(
+              child: Headerqr(),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

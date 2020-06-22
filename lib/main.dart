@@ -3,6 +3,7 @@ import 'package:corona_tracker/json/address.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   

@@ -30,6 +30,7 @@ class _QrcodeWidgetState extends State<QrcodeWidget> {
   }
 
   _onQrViewCreated(QRViewController controller) async {
+    //controller = widget.controller;
     controller.scannedDataStream.listen((scanData) {
       print('scan data ${scanData.toString()}');
       controller.pauseCamera();
