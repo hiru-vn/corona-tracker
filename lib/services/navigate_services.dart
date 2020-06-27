@@ -40,7 +40,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Views.qrPage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => QrController(), child: Scanqrpage()));
+              create: (_) => QrController(), child: QrPage()));
     case Views.notificationPage:
       return CupertinoPageRoute(
           builder: (context) => NotificationPage()
