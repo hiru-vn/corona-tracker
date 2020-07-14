@@ -18,6 +18,7 @@ class _InfoPageState extends State<InfoPage>
   ScrollController _scrollController = ScrollController();
   bool isLoading = true;
   List data;
+  List stores = [];
 
   @override
   void initState() {
@@ -27,6 +28,32 @@ class _InfoPageState extends State<InfoPage>
 
   @override
   bool get wantKeepAlive => true;
+
+  Future<dynamic> fetchStore(int id) async {
+    try {
+      var dio = Dio();
+      Response response;
+      String baseURL = globals.baseURL + "/store/get";
+      var body = {
+        "id": id,
+      };
+      response = await dio.get(baseURL, queryParameters: body);
+      if (response.statusCode == 200) {
+        if (response.data['data'] != null) {
+          return response.data['data'];
+        }
+      }
+      return null;
+    } catch (e) {
+      print("false");
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "có lỗi xảy ra",
+        desc: "Vui lòng kiểm tra ke noi mang",
+      ).show();
+    }
+  }
 
   Future<void> fetchData() async {
     try {
@@ -46,9 +73,14 @@ class _InfoPageState extends State<InfoPage>
                   (e["user2id"] == globals.id &&
                       e["user2infectlevel"] > e["user1infectlevel"]))
               .toList();
+          for (int i = 0; i < fixedData.length; i++) {
+            final store = await fetchStore(fixedData[i]["storeid"]);
+            stores.add(store);
+          }
           setState(() {
             data = fixedData;
           });
+
           print("oke");
         }
       }
@@ -274,6 +306,9 @@ class _InfoPageState extends State<InfoPage>
                               int curRisk = data[index]["user1id"] == globals.id
                                   ? data[index]["user2infectlevel"]
                                   : data[index]["user1infectlevel"];
+                              String storeName = stores[index]["name"];
+                              String time = data[index]["date"]["string"];
+                              String address = data[index]["address"];
                               return Padding(
                                 padding:
                                     const EdgeInsets.symmetric(vertical: 5),
@@ -290,9 +325,9 @@ class _InfoPageState extends State<InfoPage>
                                       child: DetailCard(
                                         content: "Có khả năng tiếp xúc với F" +
                                             curRisk.toString(),
-                                        dateTime: "Từ 17:12 - 17:17 ngày 20/3",
-                                        nameDiner: "Circle K ",
-                                        address: "Hà Nội",
+                                        dateTime: address??'',
+                                        nameDiner: storeName,
+                                        address: '',
                                       )),
                                 ),
                               );
