@@ -1,18 +1,75 @@
 import 'package:corona_tracker/services/navigate_services.dart';
-import 'package:corona_tracker/ui/pages/notification_page.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:corona_tracker/ui/widgets/info/detail_card.dart';
 import 'package:corona_tracker/ui/widgets/info/information_card.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:corona_tracker/globals.dart' as globals;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-class InfoPage extends StatelessWidget {
+class InfoPage extends StatefulWidget {
+  @override
+  _InfoPageState createState() => _InfoPageState();
+}
+
+class _InfoPageState extends State<InfoPage>
+    with AutomaticKeepAliveClientMixin {
+  ScrollController _scrollController = ScrollController();
+  bool isLoading = true;
+  List data;
+
+  @override
+  void initState() {
+    fetchData();
+    super.initState();
+  }
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future<void> fetchData() async {
+    try {
+      var dio = Dio();
+      Response response;
+      String baseURL = globals.baseURL + "/user/getRiskEvent";
+      var body = {
+        "UserId": globals.id,
+      };
+      response = await dio.get(baseURL, queryParameters: body);
+      if (response.statusCode == 200) {
+        if (response.data['data'] != null) {
+          final fixedData = (response.data['data'] as List)
+              .where((e) =>
+                  (e["user1id"] == globals.id &&
+                      e["user1infectlevel"] > e["user2infectlevel"]) ||
+                  (e["user2id"] == globals.id &&
+                      e["user2infectlevel"] > e["user1infectlevel"]))
+              .toList();
+          setState(() {
+            data = fixedData;
+          });
+          print("oke");
+        }
+      }
+    } catch (e) {
+      print("false");
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "có lỗi xảy ra",
+        desc: "Vui lòng kiểm tra tài khoản",
+      ).show();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SafeArea(
-      child: Column(
-        children: <Widget>[
+      child: SingleChildScrollView(
+        child: Column(
+          children: <Widget>[
 //            Container(
 //              width: double.infinity,
 //              height: 170,
@@ -46,7 +103,7 @@ class InfoPage extends StatelessWidget {
 //                ],
 //              ),
 //            ),
-          Container(
+            Container(
               width: double.infinity,
               height: 280,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
@@ -77,7 +134,6 @@ class InfoPage extends StatelessWidget {
                         height: 100,
                         child: Image.asset('assets/images/virus3.png')),
                   ),
-
                   Positioned(
                     right: 0,
                     top: 50,
@@ -106,12 +162,13 @@ class InfoPage extends StatelessWidget {
                         onPressed: () {
                           Navigator.pushNamed(context, Views.notificationPage);
                         },
-                        icon: Icon(Icons.notifications,
-                        size: 30,),
+                        icon: Icon(
+                          Icons.notifications,
+                          size: 30,
+                        ),
                       ),
                     ],
                   ),
-
                   Positioned(
                     top: 80,
                     child: Material(
@@ -119,16 +176,19 @@ class InfoPage extends StatelessWidget {
                       color: Colors.white.withOpacity(0.8),
                       elevation: 2.0,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 35,horizontal: 10),
-                        width: MediaQuery.of(context).size.width-50,
+                        padding: const EdgeInsets.symmetric(
+                            vertical: 35, horizontal: 10),
+                        width: MediaQuery.of(context).size.width - 50,
                         height: 150,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: <Widget>[
-                            InformationCard(
-                              title: "Khu vực",
-                              color: Colors.red,
-                              detail: "NGUY CƠ CAO",
+                            Expanded(
+                              child: InformationCard(
+                                title: "Khu vực",
+                                color: Colors.red,
+                                detail: "NGUY CƠ CAO",
+                              ),
                             ),
                             const SizedBox(
                               width: 5,
@@ -140,10 +200,12 @@ class InfoPage extends StatelessWidget {
                             const SizedBox(
                               width: 10,
                             ),
-                            InformationCard(
-                              title: "F0,F1 đã tiếp xúc ",
-                              color: Colors.red,
-                              detail: "0",
+                            Expanded(
+                              child: InformationCard(
+                                title: "F0,F1 đã tiếp xúc ",
+                                color: Colors.red,
+                                detail: "0",
+                              ),
                             ),
                             const SizedBox(
                               width: 5,
@@ -169,51 +231,80 @@ class InfoPage extends StatelessWidget {
                   )
                 ],
               ),
-          ),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 20),
-            width: double.infinity,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            ),
+            Container(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text("Cảnh báo",style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 20,
-                    ),),
-                    RaisedButton(shape: const RoundedRectangleBorder(
-
-                    ), onPressed: () {
-                      navigatorKey.currentState.pushNamed(Views.qrPage);
-                    },
-                      child: Text("Quét QR",style: TextStyle(color: Colors.black),),)
-
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          "Cảnh báo",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 20,
+                          ),
+                        ),
+                        RaisedButton(
+                          shape: const RoundedRectangleBorder(),
+                          onPressed: () {
+                            navigatorKey.currentState.pushNamed(Views.qrPage);
+                          },
+                          child: Text(
+                            "Quét QR",
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    data != null
+                        ? ListView.builder(
+                            shrinkWrap: true,
+                            controller: _scrollController,
+                            //physics: NeverScrollableScrollPhysics(),
+                            itemCount: data.length,
+                            itemBuilder: (context, index) {
+                              int curRisk = data[index]["user1id"] == globals.id
+                                  ? data[index]["user2infectlevel"]
+                                  : data[index]["user1infectlevel"];
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 5),
+                                child: Material(
+                                  elevation: 2,
+                                  child: Container(
+                                      padding: const EdgeInsets.only(
+                                          top: 10,
+                                          left: 10,
+                                          right: 5,
+                                          bottom: 5),
+                                      width: double.infinity,
+                                      height: 90,
+                                      child: DetailCard(
+                                        content: "Có khả năng tiếp xúc với F" +
+                                            curRisk.toString(),
+                                        dateTime: "Từ 17:12 - 17:17 ngày 20/3",
+                                        nameDiner: "Circle K ",
+                                        address: "Hà Nội",
+                                      )),
+                                ),
+                              );
+                            },
+                          )
+                        : SizedBox.shrink()
                   ],
                 ),
-                const SizedBox(
-                  height: 20,
-                ),
-                Material(
-                  elevation: 3.0,
-                  child: Container(
-                      padding: const EdgeInsets.only(top: 30,left: 10,right: 5,bottom: 5),
-                      width: double.infinity,
-                      height: 100,
-                      child: const DetailCard(
-                        content: "Có khả năng tiếp xúc với F3",
-                        dateTime: "Từ 17:12 - 17:17 ngày 20/3",
-                        nameDiner: "Circle K ",
-                        address: "Hà Nội",
-                      )
-                  ),
-                )
-              ],
-            ),
-          )
-        ],
+              ),
+            )
+          ],
+        ),
       ),
     ));
   }

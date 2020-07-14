@@ -12,6 +12,9 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   final _bottomNavigationKey = GlobalKey();
   final _pageController = PageController(initialPage: 0);
+  final DashboardPage dashboardPage = DashboardPage();
+  final InfoPage infoPage = InfoPage();
+  final MapPage mapPage = MapPage();
 
   void _changePageByPress(int index) {
     _pageController.animateToPage(index,
@@ -25,9 +28,9 @@ class _HomePageState extends State<HomePage> {
         physics: const NeverScrollableScrollPhysics(),
         controller: _pageController,
         children: <Widget>[
-          DashboardPage(),
-          InfoPage(),
-          MapPage(),
+         dashboardPage,
+         infoPage,
+         mapPage,
         ],
       ),
       bottomNavigationBar:

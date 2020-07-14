@@ -35,13 +35,16 @@ class _MyHomePageState extends State<MyMapPage> {
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Vị trí người nhiễm bệnh'),
       ),
-      body: Stack(
-        children: [Container(
+      body: Stack(children: [
+        Container(
           height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
           child: GoogleMap(
@@ -51,8 +54,7 @@ class _MyHomePageState extends State<MyMapPage> {
             onMapCreated: mapCreated,
           ),
         ),
-        ]
-      ),
+      ]),
     );
   }
 
