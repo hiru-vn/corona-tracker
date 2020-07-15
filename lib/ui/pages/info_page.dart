@@ -19,6 +19,9 @@ class _InfoPageState extends State<InfoPage>
   bool isLoading = true;
   List data;
   List stores = [];
+  dynamic city;
+  List<String> riskStr = ["An toàn", "Nguy cơ", "Nguy cơ cao", "Bùng phát dịch", "Dịch lan rộng"];
+  List<Color> colors = [Colors.green , Colors.yellow, Colors.orange, Colors.red, Colors.redAccent[700]];
 
   @override
   void initState() {
@@ -55,6 +58,31 @@ class _InfoPageState extends State<InfoPage>
     }
   }
 
+  Future<void> fetchCityData() async {
+    try {
+      var dio = Dio();
+      Response response;
+      String baseURL = globals.baseURL + "/city/getAll";
+      response = await dio.get(baseURL);
+      if (response.statusCode == 200) {
+        if (response.data['data'] != null) {
+          setState(() {
+            city = (response.data['data'] as List)
+                .firstWhere((element) => element["id"] == globals.cityCode);
+          });
+        }
+      }
+    } catch (e) {
+      print("false");
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "có lỗi xảy ra",
+        desc: "Vui lòng kiểm tra ke noi mang",
+      ).show();
+    }
+  }
+
   Future<void> fetchData() async {
     try {
       var dio = Dio();
@@ -73,6 +101,11 @@ class _InfoPageState extends State<InfoPage>
                   (e["user2id"] == globals.id &&
                       e["user2infectlevel"] > e["user1infectlevel"]))
               .toList();
+          if (fixedData.length > 0) {
+            globals.risk = fixedData[0]["user1id"] == globals.id
+                ? fixedData[0]["user1infectlevel"]
+                : fixedData[0]["user2infectlevel"];
+          }
           for (int i = 0; i < fixedData.length; i++) {
             final store = await fetchStore(fixedData[i]["storeid"]);
             stores.add(store);
@@ -218,8 +251,8 @@ class _InfoPageState extends State<InfoPage>
                             Expanded(
                               child: InformationCard(
                                 title: "Khu vực",
-                                color: Colors.red,
-                                detail: "NGUY CƠ CAO",
+                                color: city!=null? colors[city["infectedLevel"]] : colors[0],
+                                detail: city!=null? riskStr[city["infectedLevel"]] : riskStr[0],
                               ),
                             ),
                             const SizedBox(
@@ -236,7 +269,17 @@ class _InfoPageState extends State<InfoPage>
                               child: InformationCard(
                                 title: "F0,F1 đã tiếp xúc ",
                                 color: Colors.red,
-                                detail: "0",
+                                detail: data != null
+                                    ? data
+                                        .where((element) =>
+                                            [0, 1].contains(
+                                                element["user2infectlevel"]) ||
+                                            [0, 1].contains(
+                                                element["user1infectlevel"]))
+                                        .toList()
+                                        .length
+                                        .toString()
+                                    : "0",
                               ),
                             ),
                             const SizedBox(
@@ -253,7 +296,9 @@ class _InfoPageState extends State<InfoPage>
                               child: InformationCard(
                                 title: "Khả năng lây nhiễm",
                                 color: kAbility,
-                                detail: "Trung bình",
+                                detail: globals.risk != null
+                                    ? "F${globals.risk}"
+                                    : "Thấp",
                               ),
                             ),
                           ],
@@ -325,7 +370,7 @@ class _InfoPageState extends State<InfoPage>
                                       child: DetailCard(
                                         content: "Có khả năng tiếp xúc với F" +
                                             curRisk.toString(),
-                                        dateTime: address??'',
+                                        dateTime: address ?? '',
                                         nameDiner: storeName,
                                         address: '',
                                       )),
