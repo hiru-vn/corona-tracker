@@ -25,7 +25,7 @@ class DashboardPageWidget extends StatefulWidget {
   _DashboardPageStateWidget createState() => _DashboardPageStateWidget();
 }
 
-class _DashboardPageStateWidget extends State<DashboardPageWidget> {
+class _DashboardPageStateWidget extends State<DashboardPageWidget>  with AutomaticKeepAliveClientMixin{
   final _controller = ScrollController();
   double offset = 0;
   Future<List<Countries>> listCountries;
@@ -38,6 +38,8 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
     print(globals.id);
   }
 
+  @override
+  bool get wantKeepAlive => true;
   @override
   void dispose() {
     _controller.dispose();

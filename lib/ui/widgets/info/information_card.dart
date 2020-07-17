@@ -15,16 +15,20 @@ class InformationCard extends StatelessWidget {
         Expanded(
           child: Text(
             title,
+            textAlign: TextAlign.center,
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           ),
         ),
-        const SizedBox(
-          height: 10,
+        FittedBox(
+          fit: BoxFit.cover,
+          child: Text(
+            detail,
+            style: TextStyle(color: color, fontWeight: FontWeight.normal),
+          ),
         ),
-        Text(
-          detail,
-          style: TextStyle(color: color, fontWeight: FontWeight.normal),
-        )
+        const SizedBox(
+          height: 14,
+        ),
       ],
     );
   }

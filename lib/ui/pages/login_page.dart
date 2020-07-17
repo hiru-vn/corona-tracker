@@ -177,8 +177,8 @@ class _RegisterPageState extends State<LoginPage> {
         var data = {
           "username": _emailController.text,
           "password": _passController.text,
-          "lat": location.latitude,
-          "long": location.longitude
+          "long": 22.2,
+          "lat": 22.2
         };
         response = await dio.post(baseURL, data: data);
         if (response.statusCode == 200) {
