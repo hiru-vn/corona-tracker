@@ -6,42 +6,48 @@ class DetailCard extends StatelessWidget {
   final String address;
   final String nameDiner;
 
-  const DetailCard({Key key, this.content, this.dateTime, this.address, this.nameDiner}) : super(key: key);
+  const DetailCard(
+      {Key key, this.content, this.dateTime, this.address, this.nameDiner})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween ,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween ,
-          children: <Widget>[
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(content,style: TextStyle(
-                  color: Colors.red,
-
-                ),),
-                Text(dateTime)
-              ],
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(nameDiner),
-                Text(address),
-              ],
-            ),
-
-          ],
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    content,
+                    style: TextStyle(
+                      color: Colors.red,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
+                    child: Text(dateTime),
+                  )
+                ],
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(nameDiner),
+                  Text(address),
+                ],
+              ),
+            ],
+          ),
         ),
-        Align(alignment: Alignment.topRight,child: Text("  Chi tiết >>",style: TextStyle(
-            color: Color(0xff28E2E2)
-        ),))
       ],
     );
   }

@@ -58,7 +58,10 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
 
     model.listCountries.forEach((item) => {
           listItemMenu.add(
-            DropdownMenuItem<Countries>(child: Text(item.country), value: item,),
+            DropdownMenuItem<Countries>(
+              child: Text(item.country),
+              value: item,
+            ),
           )
         });
 
@@ -70,7 +73,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
             MyHeader(
               image: "assets/icons/Drcorona.svg",
               textTop: "Hãy ở nhà",
-              textBottom: "để bảo vệ bản thân\nvà mọi người",        
+              textBottom: "để bảo vệ bản thân\nvà mọi người",
               offset: offset,
             ),
             Container(
@@ -129,7 +132,10 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                       ),
                       const Spacer(),
                       FlatButton(
-                        onPressed: () =>Navigator.push(context, MaterialPageRoute(builder: (context){return DetailStore();})),
+                        onPressed: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (context) {
+                          return DetailStore();
+                        })),
                         child: Text(
                           "Chi tiết",
                           style: TextStyle(
@@ -142,7 +148,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                   ),
                   const SizedBox(height: 20),
                   Container(
-                    padding: const EdgeInsets.fromLTRB(50,20,50,20),
+                    padding: const EdgeInsets.fromLTRB(50, 20, 50, 20),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
                       color: Colors.white,
@@ -189,43 +195,43 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget> {
                     ),
                   ),
                   const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: <Widget>[
-                      Text(
-                        "Lây lan Virus",
-                        style: kTitleTextstyle,
-                      ),
-                      Text(
-                        "Chi tiết",
-                        style: TextStyle(
-                          color: kPrimaryColor,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Container(
-                    margin: const EdgeInsets.only(top: 20),
-                    padding: const EdgeInsets.all(20),
-                    height: 178,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20),
-                      color: Colors.white,
-                      boxShadow: [
-                        BoxShadow(
-                          offset: const Offset(0, 10),
-                          blurRadius: 30,
-                          color: kShadowColor,
-                        ),
-                      ],
-                    ),
-                    child: Image.asset(
-                      "assets/images/map.png",
-                      fit: BoxFit.contain,
-                    ),
-                  ),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: <Widget>[
+                  //     Text(
+                  //       "Lây lan Virus",
+                  //       style: kTitleTextstyle,
+                  //     ),
+                  //     Text(
+                  //       "Chi tiết",
+                  //       style: TextStyle(
+                  //         color: kPrimaryColor,
+                  //         fontWeight: FontWeight.w600,
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // Container(
+                  //   margin: const EdgeInsets.only(top: 20),
+                  //   padding: const EdgeInsets.all(20),
+                  //   height: 178,
+                  //   width: double.infinity,
+                  //   decoration: BoxDecoration(
+                  //     borderRadius: BorderRadius.circular(20),
+                  //     color: Colors.white,
+                  //     boxShadow: [
+                  //       BoxShadow(
+                  //         offset: const Offset(0, 10),
+                  //         blurRadius: 30,
+                  //         color: kShadowColor,
+                  //       ),
+                  //     ],
+                  //   ),
+                  //   child: Image.asset(
+                  //     "assets/images/map.png",
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // ),
                   const SpacingBox(height: 3),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

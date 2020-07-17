@@ -30,16 +30,16 @@ class ScanqrBloc extends BaseBloc with ChangeNotifier {
     try {
       var dio = Dio();
       Response response;
-      String baseURL =  globals.baseURL + "userstore/create";
-      int uid = await SPref.instance.get('userId');
+      String baseURL = globals.baseURL + "/userstore/create";
+      int uid = globals.id;
+      var today = new DateTime.now();
       var data = {
-        "timein": "20:22 23/2/1999",
-        "timout": "20:22 23/2/1999",
-        "userid": 3,
+        "timein": today.toString(),
+        "timout": today.add(new Duration(minutes: 30)).toString(),
+        "userid": uid,
         "storeid": int.parse(e.code),
       };
       response = await dio.post(baseURL, data: data);
-
       processEventSink.add(ScanqrSucessEvent(e.code));
     } catch (e) {
       processEventSink.add(ScanqrFailedEvent(e.message.toString()));

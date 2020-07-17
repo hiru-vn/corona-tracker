@@ -5,11 +5,12 @@ class API {
   static Future<List<Countries>> fetchData() async {
     List<Countries> arrCountries = [];
     var dio = Dio();
-    const  baseURL = "https://corona.lmao.ninja/v2/countries";
+    const baseURL = "https://corona.lmao.ninja/v2/countries";
     var res = await dio.get(baseURL);
     if (res.statusCode == 200) {
       var jsonData = res.data;
-      for(var i in jsonData) {
+      for (var i in jsonData) {
+        //print(i);
         final countries = Countries(
           cases: i['cases'],
           country: i['country'],

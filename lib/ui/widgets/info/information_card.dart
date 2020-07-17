@@ -10,23 +10,21 @@ class InformationCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return    Column(
+    return Column(
       children: <Widget>[
-        Text(title,
-          style: TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.w500
+        Expanded(
+          child: Text(
+            title,
+            style: TextStyle(color: Colors.black, fontWeight: FontWeight.w500),
           ),
         ),
         const SizedBox(
           height: 10,
         ),
-        Text(detail,
-        style: TextStyle(
-          color: color,
-
-          fontWeight: FontWeight.normal
-        ),)
+        Text(
+          detail,
+          style: TextStyle(color: color, fontWeight: FontWeight.normal),
+        )
       ],
     );
   }
