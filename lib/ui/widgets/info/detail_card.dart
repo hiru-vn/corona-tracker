@@ -35,7 +35,9 @@ class DetailCard extends StatelessWidget {
                         color: Colors.red,
                       ),
                     ),
-                    SpacingBox(height: 1,),
+                    SpacingBox(
+                      height: 1,
+                    ),
                     Text(dateTime)
                   ],
                 ),

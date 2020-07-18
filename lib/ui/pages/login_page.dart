@@ -9,6 +9,7 @@ import 'package:corona_tracker/globals.dart' as globals;
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -145,45 +146,51 @@ class _RegisterPageState extends State<LoginPage> {
       ),
     );
   }
-  void checkVariable()
-  {
+
+  void checkVariable() {
     setState(() {
       Pattern pattern =
-        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
-    RegExp regex = new RegExp(pattern);
-    if (!regex.hasMatch(_emailController.text.toString()) ||
-        _emailController.text.length < 6) {
-      userinvalid = true;
-    } else
-      userinvalid = false;
-    if (_passController.text.length < 6) {
-      passinvalid = true;
-    } else
-      passinvalid = false;
+          r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      RegExp regex = new RegExp(pattern);
+      if (!regex.hasMatch(_emailController.text.toString()) ||
+          _emailController.text.length < 6) {
+        userinvalid = true;
+      } else
+        userinvalid = false;
+      if (_passController.text.length < 6) {
+        passinvalid = true;
+      } else
+        passinvalid = false;
     });
   }
 
   Future<void> clickSignin() async {
+    final location = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+
     checkVariable();
     if (!userinvalid && !passinvalid) {
       try {
         var dio = Dio();
         Response response;
-        String baseURL = globals.baseURL +"/user/sign-in";
+        String baseURL = globals.baseURL + "/user/sign-in";
         var data = {
           "username": _emailController.text,
           "password": _passController.text,
           "long": 22.2,
-          "lat":22.2
+          "lat": 22.2
         };
         response = await dio.post(baseURL, data: data);
         if (response.statusCode == 200) {
           globals.id = response.data['data']['id'];
           print("oke");
-          Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) =>
-              ChangeNotifierProvider(
-              create: (_) => HomeController(), child: HomePage(),
-              )), (Route<dynamic> route) => false);
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (context) => ChangeNotifierProvider(
+                        create: (_) => HomeController(),
+                        child: HomePage(),
+                      )),
+              (Route<dynamic> route) => false);
         }
       } catch (e) {
         print("false");

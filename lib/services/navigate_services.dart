@@ -32,7 +32,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Views.loginPage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => LoginController(), child: LoginPage()));    
+              create: (_) => LoginController(), child: LoginPage()));
     case Views.homePage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
@@ -40,11 +40,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case Views.qrPage:
       return CupertinoPageRoute(
           builder: (context) => ChangeNotifierProvider(
-              create: (_) => QrController(), child: QrPage()));
+              create: (_) => QrController(), child: Scanqrpage()));
     case Views.notificationPage:
-      return CupertinoPageRoute(
-          builder: (context) => NotificationPage()
-      );
+      return CupertinoPageRoute(builder: (context) => NotificationPage());
     default:
       return MaterialPageRoute(
         builder: (context) => Scaffold(

@@ -32,7 +32,11 @@ dependencies:
   countdown_flutter: ^0.1.1
   qr_code_scanner: ^0.0.12
   flutter_svg: ^0.17.4
+  # add google
   google_maps_flutter: ^0.4.0
+  flutter_google_places: ^0.2.5
+  google_maps_webservice: ^0.0.17
+  location: ^2.4.0
   geolocator: ^5.3.1
   # Add the following two lines
   http: ^0.12.0+1

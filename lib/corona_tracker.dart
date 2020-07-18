@@ -15,15 +15,14 @@ class CoronaTracker extends StatelessWidget {
         return Provider(
           create: (_) => AppBloc(),
           child: MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: Strings.appName['vi'],
-            theme: ThemeData(
-                fontFamily: 'Quicksand',
-                scaffoldBackgroundColor: const Color(0xFFFFFFFF)),
-            onGenerateRoute: generateRoute,
-            navigatorKey: navigatorKey,
-            initialRoute: Views.homePage,
-          ),
+              debugShowCheckedModeBanner: false,
+              title: Strings.appName['vi'],
+              theme: ThemeData(
+                  fontFamily: 'Quicksand',
+                  scaffoldBackgroundColor: const Color(0xFFFFFFFF)),
+              onGenerateRoute: generateRoute,
+              navigatorKey: navigatorKey,
+              initialRoute: Views.homePage),
         );
       });
     });

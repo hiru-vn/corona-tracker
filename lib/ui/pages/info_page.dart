@@ -20,8 +20,20 @@ class _InfoPageState extends State<InfoPage>
   List data;
   List stores = [];
   dynamic city;
-  List<String> riskStr = ["An toàn", "Nguy cơ", "Nguy cơ cao", "Bùng phát dịch", "Dịch lan rộng"];
-  List<Color> colors = [Colors.green , Colors.yellow, Colors.orange, Colors.red, Colors.redAccent[700]];
+  List<String> riskStr = [
+    "An toàn",
+    "Nguy cơ",
+    "Nguy cơ cao",
+    "Bùng phát dịch",
+    "Dịch lan rộng"
+  ];
+  List<Color> colors = [
+    Colors.green,
+    Colors.yellow,
+    Colors.orange,
+    Colors.red,
+    Colors.redAccent[700]
+  ];
 
   @override
   void initState() {
@@ -251,8 +263,12 @@ class _InfoPageState extends State<InfoPage>
                             Expanded(
                               child: InformationCard(
                                 title: "Khu vực",
-                                color: city!=null? colors[city["infectedLevel"]] : colors[0],
-                                detail: city!=null? riskStr[city["infectedLevel"]] : riskStr[0],
+                                color: city != null
+                                    ? colors[city["infectedLevel"]]
+                                    : colors[0],
+                                detail: city != null
+                                    ? riskStr[city["infectedLevel"]]
+                                    : riskStr[0],
                               ),
                             ),
                             const SizedBox(
