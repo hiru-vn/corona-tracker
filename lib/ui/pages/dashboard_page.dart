@@ -174,7 +174,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                       FlatButton(
                         onPressed: () => Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return DetailStore();
+                          return DetailStore(id: 1,);
                         })),
                         child: Text(
                           "Chi tiết",
