@@ -224,7 +224,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                             padding: const EdgeInsets.all(10.0),
                             child: Counter(
                               color: kDeathColor,
-                              number: 0,
+                              number: selectedCity != null
+                                  ? selectedCity["criticalCount"]
+                                  : 0,
                               title: "Tử vong",
                             ),
                           ),
@@ -232,7 +234,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                             padding: const EdgeInsets.all(10.0),
                             child: Counter(
                               color: kRecovercolor,
-                              number: 0,
+                              number: selectedCity != null
+                                  ? selectedCity["curedCount"]
+                                  : 0,
                               title: "Bình phục",
                             ),
                           ),
