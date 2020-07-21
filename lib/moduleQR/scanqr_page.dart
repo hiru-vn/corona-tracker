@@ -2,6 +2,7 @@ import 'package:audioplayers/audio_cache.dart';
 import 'package:corona_tracker/moduleQR/events/qrdetected_event.dart';
 import 'package:corona_tracker/moduleQR/widgets/header_qr.dart';
 import 'package:corona_tracker/services/navigate_services.dart';
+import 'package:corona_tracker/ui/pages/detailStore.dart';
 import 'package:flutter/material.dart';
 import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'package:qr_code_scanner/qr_scanner_overlay_shape.dart';
@@ -107,9 +108,14 @@ class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
             ),
             onPressed: () {
               Future.delayed(const Duration(microseconds: 300), () {
-                String idstore = event.data;
+                int idstore = int.parse(event.data);
                 // nav to detail
                 Navigator.pop(context);
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return DetailStore(
+                    id: idstore,
+                  );
+                }));
               });
             },
             color: Colors.redAccent,

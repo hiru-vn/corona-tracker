@@ -8,10 +8,12 @@ import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/counter.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/prevent_card.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/symtom_card.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:corona_tracker/globals.dart' as globals;
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DashboardPage extends StatelessWidget {
   @override
@@ -25,17 +27,46 @@ class DashboardPageWidget extends StatefulWidget {
   _DashboardPageStateWidget createState() => _DashboardPageStateWidget();
 }
 
-class _DashboardPageStateWidget extends State<DashboardPageWidget>  with AutomaticKeepAliveClientMixin{
+class _DashboardPageStateWidget extends State<DashboardPageWidget>
+    with AutomaticKeepAliveClientMixin {
   final _controller = ScrollController();
   double offset = 0;
   Future<List<Countries>> listCountries;
+  List cities = [];
+  dynamic selectedCity;
 
   @override
   void initState() {
     super.initState();
     _controller.addListener(onScroll);
     listCountries = API.fetchData();
+    fetchCityData();
     print(globals.id);
+  }
+
+  Future<void> fetchCityData() async {
+    try {
+      var dio = Dio();
+      Response response;
+      String baseURL = globals.baseURL + "/city/getAll";
+      response = await dio.get(baseURL);
+      if (response.statusCode == 200) {
+        if (response.data['data'] != null) {
+          setState(() {
+            cities = (response.data['data'] as List);
+            selectedCity = cities[0];
+          });
+        }
+      }
+    } catch (e) {
+      print("false");
+      Alert(
+        context: context,
+        type: AlertType.error,
+        title: "có lỗi xảy ra",
+        desc: "Vui lòng kiểm tra ke noi mang",
+      ).show();
+    }
   }
 
   @override
@@ -54,18 +85,24 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
 
   @override
   Widget build(BuildContext context) {
-    final model = Provider.of<HomeController>(context);
+    final listItemMenu = <DropdownMenuItem<dynamic>>[];
 
-    final listItemMenu = <DropdownMenuItem<Countries>>[];
-
-    model.listCountries.forEach((item) => {
-          listItemMenu.add(
-            DropdownMenuItem<Countries>(
-              child: Text(item.country),
-              value: item,
-            ),
-          )
-        });
+    // model.listCountries.forEach((item) => {
+    //       listItemMenu.add(
+    //         DropdownMenuItem<Countries>(
+    //           child: Text(item.country),
+    //           value: item,
+    //         ),
+    //       )
+    //     });
+    cities.forEach((item) {
+      listItemMenu.add(
+        DropdownMenuItem<dynamic>(
+          child: Text(item["name"]),
+          value: item,
+        ),
+      );
+    });
 
     return Scaffold(
       body: SingleChildScrollView(
@@ -95,14 +132,18 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                   SvgPicture.asset("assets/icons/maps-and-flags.svg"),
                   const SizedBox(width: 20),
                   Expanded(
-                    child: model.listCountries.isNotEmpty
-                        ? DropdownButton<Countries>(
+                    child: cities.isNotEmpty
+                        ? DropdownButton<dynamic>(
                             isExpanded: true,
                             underline: const SizedBox(),
                             icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                            value: model.selectedCountry,
+                            value: selectedCity,
                             items: listItemMenu.toList(),
-                            onChanged: model.logic.updateDataByCountry,
+                            onChanged: (city)  {
+                              setState(() {
+                                selectedCity = city;
+                              });
+                            },
                           )
                         : const CircularProgressIndicator(),
                   ),
@@ -124,7 +165,8 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                               style: kTitleTextstyle,
                             ),
                             TextSpan(
-                              text: "Cập nhật mới nhất ngày 28 tháng 3",
+                              text:
+                                  "Cập nhật mới nhất ngày ${DateTime.now().subtract(Duration(days: 1)).day} tháng ${DateTime.now().subtract(Duration(days: 1)).month}",
                               style: TextStyle(
                                 color: kTextLightColor,
                               ),
@@ -136,7 +178,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                       FlatButton(
                         onPressed: () => Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                          return DetailStore();
+                          return DetailStore(id: 1,);
                         })),
                         child: Text(
                           "Chi tiết",
@@ -172,7 +214,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                             padding: const EdgeInsets.all(10.0),
                             child: Counter(
                               color: kInfectedColor,
-                              number: model.selectedCountry?.cases,
+                              number: selectedCity != null
+                                  ? selectedCity["infectedCount"]
+                                  : 0,
                               title: "Bị lây nhiễm",
                             ),
                           ),
@@ -180,7 +224,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                             padding: const EdgeInsets.all(10.0),
                             child: Counter(
                               color: kDeathColor,
-                              number: model.selectedCountry?.deaths,
+                              number: selectedCity != null
+                                  ? selectedCity["criticalCount"]
+                                  : 0,
                               title: "Tử vong",
                             ),
                           ),
@@ -188,7 +234,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                             padding: const EdgeInsets.all(10.0),
                             child: Counter(
                               color: kRecovercolor,
-                              number: model.selectedCountry?.critical,
+                              number: selectedCity != null
+                                  ? selectedCity["curedCount"]
+                                  : 0,
                               title: "Bình phục",
                             ),
                           ),
@@ -197,43 +245,43 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                     ),
                   ),
                   const SizedBox(height: 20),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //   children: <Widget>[
-                  //     Text(
-                  //       "Lây lan Virus",
-                  //       style: kTitleTextstyle,
-                  //     ),
-                  //     Text(
-                  //       "Chi tiết",
-                  //       style: TextStyle(
-                  //         color: kPrimaryColor,
-                  //         fontWeight: FontWeight.w600,
-                  //       ),
-                  //     ),
-                  //   ],
-                  // ),
-                  // Container(
-                  //   margin: const EdgeInsets.only(top: 20),
-                  //   padding: const EdgeInsets.all(20),
-                  //   height: 178,
-                  //   width: double.infinity,
-                  //   decoration: BoxDecoration(
-                  //     borderRadius: BorderRadius.circular(20),
-                  //     color: Colors.white,
-                  //     boxShadow: [
-                  //       BoxShadow(
-                  //         offset: const Offset(0, 10),
-                  //         blurRadius: 30,
-                  //         color: kShadowColor,
-                  //       ),
-                  //     ],
-                  //   ),
-                  //   child: Image.asset(
-                  //     "assets/images/map.png",
-                  //     fit: BoxFit.contain,
-                  //   ),
-                  // ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        "Lây lan Virus",
+                        style: kTitleTextstyle,
+                      ),
+                      Text(
+                        "Chi tiết",
+                        style: TextStyle(
+                          color: kPrimaryColor,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    margin: const EdgeInsets.only(top: 20),
+                    padding: const EdgeInsets.all(0),
+                    height: 178,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(
+                          offset: const Offset(0, 10),
+                          blurRadius: 30,
+                          color: kShadowColor,
+                        ),
+                      ],
+                    ),
+                    child: Image.network(
+                      "https://i.imgur.com/f9iZ0wB.png",
+                      fit: BoxFit.contain,
+                    ),
+                  ),
                   const SpacingBox(height: 3),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,13 +317,13 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>  with Automat
                       const SizedBox(height: 20),
                       const PreventCard(
                         text:
-                            "Since the start of the coronavirus outbreak some places have fully embraced wearing facemasks",
+                            "Đeo khẩu trang đúng cách có tác dụng ngăn chặn giọt bắn và giảm khả năng lây nhiễm/phát tán bệnh dịch",
                         image: "assets/images/wear_mask.png",
                         title: "Đeo khẩu trang",
                       ),
                       const PreventCard(
                         text:
-                            "Since the start of the coronavirus outbreak some places have fully embraced wearing facemasks",
+                            "Rửa tay sát khuẩn thường xuyên để tiêu diệt mầm mống lây bệnh",
                         image: "assets/images/wash_hands.png",
                         title: "Rửa tay",
                       ),

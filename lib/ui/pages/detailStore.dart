@@ -3,6 +3,7 @@ import 'package:corona_tracker/services/navigate_services.dart';
 import 'package:corona_tracker/ui/pages/home_page.dart';
 import 'package:corona_tracker/ui/pages/register_page.dart';
 import 'package:corona_tracker/globals.dart' as globals;
+import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,8 @@ import 'package:provider/provider.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 
 class DetailStore extends StatefulWidget {
+  final int id;
+  DetailStore({@required this.id = 1});
   @override
   DetailStorePage createState() => DetailStorePage();
 }
@@ -24,8 +27,7 @@ class DetailStorePage extends State<DetailStore> {
       CameraPosition(target: LatLng(21, 105.8), zoom: 12);
 
   @override
-  void initState()
-  {
+  void initState() {
     super.initState();
     getStore(1);
   }
@@ -33,10 +35,16 @@ class DetailStorePage extends State<DetailStore> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.blueAccent,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Chi tiết'),
+      ),
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 0, 30, 0),
         constraints: BoxConstraints.expand(),
         color: Colors.white,
+        child: SingleChildScrollView(
           child: Column(
             children: <Widget>[
               SizedBox(
@@ -108,40 +116,44 @@ class DetailStorePage extends State<DetailStore> {
                       )
                     ],
                   )),
+              SpacingBox(
+                height: 1,
+              ),
               Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(15.0),
                 child: Text(
                   "Vị trí cửa hàng:",
                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                 ),
               ),
               Container(
-                    height: 280,
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      onMapCreated: (GoogleMapController controller) {
-                        mapController = controller;
-                      },
-                      mapType: MapType.normal,
-                      initialCameraPosition: _mylocation,
-                    ),
-                  ),
+                height: 280,
+                width: MediaQuery.of(context).size.width,
+                child: GoogleMap(
+                  onMapCreated: (GoogleMapController controller) {
+                    mapController = controller;
+                  },
+                  mapType: MapType.normal,
+                  initialCameraPosition: _mylocation,
+                ),
+              ),
+              SpacingBox(
+                height: 5,
+              ),
             ],
           ),
-        
+        ),
       ),
     );
   }
-  void getStore(int id)
-  async
-  {
+
+  void getStore(int id) async {
     var dio = Dio();
     Response response;
     const baseURL = "http://127.0.0.1:3000/store/get";
-    var data = {"id" : id};
+    var data = {"id": id};
     response = await dio.get(baseURL, queryParameters: data);
-    if(response.statusCode==200)
-    {
+    if (response.statusCode == 200) {
       String nameStore = "aaaaaa";
       String addressStore = "bbbbbbb";
     }
