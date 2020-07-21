@@ -36,8 +36,9 @@ class DetailStorePage extends State<DetailStore> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        iconTheme: IconThemeData(color: Colors.black87),
+        backgroundColor: Colors.blueAccent,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text('Chi tiết'),
       ),
       body: Container(
         padding: EdgeInsets.fromLTRB(30, 0, 30, 0),

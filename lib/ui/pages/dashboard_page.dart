@@ -139,7 +139,11 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                             icon: SvgPicture.asset("assets/icons/dropdown.svg"),
                             value: selectedCity,
                             items: listItemMenu.toList(),
-                            onChanged: (city) => {},
+                            onChanged: (city)  {
+                              setState(() {
+                                selectedCity = city;
+                              });
+                            },
                           )
                         : const CircularProgressIndicator(),
                   ),
