@@ -34,6 +34,7 @@ class _InfoPageState extends State<InfoPage>
     Colors.red,
     Colors.redAccent[700]
   ];
+  String searchText = '';
 
   @override
   void initState() {
@@ -147,39 +148,6 @@ class _InfoPageState extends State<InfoPage>
       child: SingleChildScrollView(
         child: Column(
           children: <Widget>[
-//            Container(
-//              width: double.infinity,
-//              height: 170,
-//              padding: const EdgeInsets.symmetric(horizontal: 24),
-//              decoration: const BoxDecoration(
-//                gradient: LinearGradient(colors: <Color>[
-//                    Color.fromRGBO(29, 89, 115, 0.5),
-//                  Color.fromRGBO(50, 112, 139, 0),
-//                ],begin: Alignment.center,end: Alignment.bottomCenter,
-//                ),
-//              ),
-//              child: Row(
-//                children: <Widget>[
-//                  Expanded(
-//                    child: Container(
-//                      height: 40,
-//                      padding: const EdgeInsets.only(bottom: 5),
-//                      decoration: BoxDecoration(
-//                        borderRadius: BorderRadius.circular(40),
-//                        color: Color.fromRGBO(255, 255, 255, 0.7)
-//                      ),
-//                      child: TextFormField(
-//                        decoration: InputDecoration(
-//                          border: InputBorder.none,
-//                          prefixIcon: Icon(Icons.search)
-//                        ),
-//                      ),
-//                    ),
-//                  ),
-//                    Icon(Icons.notifications,size: 30,)
-//                ],
-//              ),
-//            ),
             Container(
               width: double.infinity,
               height: 280,
@@ -229,6 +197,11 @@ class _InfoPageState extends State<InfoPage>
                               borderRadius: BorderRadius.circular(40),
                               color: const Color.fromRGBO(255, 255, 255, 0.7)),
                           child: TextFormField(
+                            onFieldSubmitted: (str) {
+                              setState(() {
+                                searchText = str.trim();
+                              });
+                            },
                             decoration: InputDecoration(
                                 border: InputBorder.none,
                                 prefixIcon: Icon(Icons.search)),
@@ -362,7 +335,14 @@ class _InfoPageState extends State<InfoPage>
                             shrinkWrap: true,
                             controller: _scrollController,
                             //physics: NeverScrollableScrollPhysics(),
-                            itemCount: data.length,
+                            itemCount: data
+                                .where((element) =>
+                                    (element["address"] as String)
+                                        .contains(searchText) ||
+                                    (element["date"] as String)
+                                        .contains(searchText))
+                                .toList()
+                                .length,
                             itemBuilder: (context, index) {
                               int curRisk = data[index]["user1id"] == globals.id
                                   ? data[index]["user2infectlevel"]
