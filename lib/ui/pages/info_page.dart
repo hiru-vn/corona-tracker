@@ -1,4 +1,5 @@
 import 'package:corona_tracker/services/navigate_services.dart';
+import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:corona_tracker/ui/widgets/info/detail_card.dart';
 import 'package:corona_tracker/ui/widgets/info/information_card.dart';
@@ -38,7 +39,10 @@ class _InfoPageState extends State<InfoPage>
 
   @override
   void initState() {
-    fetchData();
+    Future.delayed(Duration(milliseconds: 300), () {
+      fetchData();
+      fetchCityData();
+    });
     super.initState();
   }
 
@@ -208,13 +212,34 @@ class _InfoPageState extends State<InfoPage>
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
+                      SpacingBox(
+                        width: 2,
+                      ),
+                      InkWell(
+                        onTap: () {
                           Navigator.pushNamed(context, Views.notificationPage);
                         },
-                        icon: Icon(
-                          Icons.notifications,
-                          size: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.notifications,
+                            size: 30,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          fetchData();
+                          fetchCityData();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.replay,
+                            size: 25,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
                     ],
@@ -339,7 +364,7 @@ class _InfoPageState extends State<InfoPage>
                                 .where((element) =>
                                     (element["address"] as String)
                                         .contains(searchText) ||
-                                    (element["date"] as String)
+                                    (element["date"]["String"] as String)
                                         .contains(searchText))
                                 .toList()
                                 .length,
@@ -348,7 +373,7 @@ class _InfoPageState extends State<InfoPage>
                                   ? data[index]["user2infectlevel"]
                                   : data[index]["user1infectlevel"];
                               String storeName = stores[index]["name"];
-                              String time = data[index]["date"]["string"];
+                              String time = data[index]["date"]["String"];
                               String address = data[index]["address"];
                               return Padding(
                                 padding:
@@ -362,13 +387,13 @@ class _InfoPageState extends State<InfoPage>
                                           right: 5,
                                           bottom: 5),
                                       width: double.infinity,
-                                      height: 90,
+                                      //height: 90,
                                       child: DetailCard(
                                         content: "Có khả năng tiếp xúc với F" +
                                             curRisk.toString(),
-                                        dateTime: address ?? '',
-                                        nameDiner: storeName,
-                                        address: '',
+                                        dateTime: time ?? '',
+                                        nameDiner: storeName ?? '',
+                                        address: address ?? '',
                                       )),
                                 ),
                               );

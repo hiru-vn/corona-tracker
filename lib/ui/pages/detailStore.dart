@@ -29,7 +29,7 @@ class DetailStorePage extends State<DetailStore> {
   @override
   void initState() {
     super.initState();
-    getStore(1);
+    getStore(widget.id);
   }
 
   @override
@@ -84,7 +84,7 @@ class DetailStorePage extends State<DetailStore> {
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            Text("123")
+                            Text(nameStore ?? '')
                           ],
                         ),
                       ),
@@ -97,23 +97,27 @@ class DetailStorePage extends State<DetailStore> {
                               style: TextStyle(
                                   fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                            Text(addressStore)
+                           // Container(child: Text(addressStore ?? '', maxLines: 3,))
                           ],
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: <Widget>[
-                            Text(
-                              "Thành phố: ",
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            Text(addressStore)
-                          ],
-                        ),
-                      )
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(addressStore ?? '', maxLines: 3,),
+                      ),
+                      // Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Row(
+                      //     children: <Widget>[
+                      //       Text(
+                      //         "Thành phố: ",
+                      //         style: TextStyle(
+                      //             fontSize: 18, fontWeight: FontWeight.bold),
+                      //       ),
+                      //       Text(addressStore)
+                      //     ],
+                      //   ),
+                      // )
                     ],
                   )),
               SpacingBox(
@@ -150,12 +154,14 @@ class DetailStorePage extends State<DetailStore> {
   void getStore(int id) async {
     var dio = Dio();
     Response response;
-    const baseURL = "http://127.0.0.1:3000/store/get";
+    final baseURL = globals.baseURL + "/store/get";
     var data = {"id": id};
     response = await dio.get(baseURL, queryParameters: data);
     if (response.statusCode == 200) {
-      String nameStore = "aaaaaa";
-      String addressStore = "bbbbbbb";
+      setState(() {
+        nameStore = response.data["data"]["name"];
+        addressStore = response.data["data"]["address"];
+      });
     }
   }
 }

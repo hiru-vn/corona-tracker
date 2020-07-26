@@ -7,14 +7,13 @@ import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:corona_tracker/globals.dart' as globals;
 import 'package:url_launcher/url_launcher.dart';
 
-class NotificationPage extends StatefulWidget {
+class ListInfectPage extends StatefulWidget {
   @override
-  _NotificationPageState createState() => _NotificationPageState();
+  _ListInfectPageState createState() => _ListInfectPageState();
 }
 
-class _NotificationPageState extends State<NotificationPage> {
-  List l_noti = [];
-  String textSearch = '';
+class _ListInfectPageState extends State<ListInfectPage> {
+  List l_infect = [];
   ScrollController controller = ScrollController();
   @override
   void initState() {
@@ -29,19 +28,12 @@ class _NotificationPageState extends State<NotificationPage> {
       Map<String, dynamic> data = {
         "id": globals.id,
       };
-      String baseURL = globals.baseURL + "/notify/getByUserid";
+      String baseURL = globals.baseURL + "/user/getInfected";
       response = await dio.get(baseURL, queryParameters: data);
       if (response.statusCode == 200) {
         if (response.data['data'] != null) {
           setState(() {
-            l_noti = (response.data['data'] as List)
-                .reversed
-                .where((element) =>
-                    (element["content"] as String)
-                        .contains(textSearch.trim()) ||
-                    (element["time"] as String).contains(textSearch.trim()) ||
-                    (element["title"] as String).contains(textSearch.trim()))
-                .toList();
+            l_infect = (response.data['data'] as List).reversed.toList();
           });
         }
       }
@@ -84,44 +76,34 @@ class _NotificationPageState extends State<NotificationPage> {
                     const SizedBox(
                       width: 10,
                     ),
-                    Expanded(
-                      child: Container(
-                        height: 50,
-                        padding: const EdgeInsets.only(top: 3),
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
-                          borderRadius: BorderRadius.circular(40),
-                        ),
-                        child: TextFormField(
-                          onFieldSubmitted: (value) {
-                            setState(() {
-                              textSearch = value;
-                            });
-                            fetchData();
-                          },
-                          decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              prefixIcon: Icon(Icons.search)),
-                        ),
-                      ),
-                    )
+                    Text("Danh sách bệnh nhân dương tính",
+                        style: TextStyle(
+                          fontSize: 17,
+                          fontWeight: FontWeight.w600,
+                        ))
                   ],
                 ),
               ),
               const SizedBox(
                 height: 20,
               ),
-              l_noti.length != 0
+              l_infect.length != 0
                   ? ListView.builder(
                       controller: controller,
                       shrinkWrap: true,
                       padding: EdgeInsets.all(0),
-                      itemCount: l_noti.length,
+                      itemCount: l_infect.length,
                       itemBuilder: (context, index) {
+                        int year = int.tryParse(
+                                l_infect[index]["yearOfBirth"]["String"]) ??
+                            1999;
                         return _notiWidget(
-                          title: l_noti[index]["title"],
-                          content: l_noti[index]["content"],
-                          time: l_noti[index]["time"],
+                          title: 'Bệnh nhân số ' + index.toString(),
+                          content: 'Địa chỉ: ' +
+                              l_infect[index]["address"]["String"],
+                          time: l_infect[index]["fullName"] +
+                              " - " +
+                              (DateTime.now().year - year).toString(),
                         );
                       },
                     )
@@ -138,7 +120,8 @@ class _NotificationPageState extends State<NotificationPage> {
     );
   }
 
-  Widget _notiWidget({String title, String content, String time}) {
+  Widget _notiWidget(
+      {String title, String content, String time, String address}) {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Material(
@@ -175,17 +158,17 @@ class _NotificationPageState extends State<NotificationPage> {
                                 color: Colors.black,
                                 fontWeight: FontWeight.w500,
                                 fontSize: 14)),
+                        SpacingBox(
+                          height: 1,
+                        ),
+                        Text(
+                          content ?? '',
+                        ),
                       ],
                     ),
                   ),
                 ],
               ),
-              SpacingBox(
-                height: 1,
-              ),
-              HtmlWidget(content ?? '', onTapUrl: (url) {
-                _launchURL(url);
-              }),
             ],
           ),
         ),

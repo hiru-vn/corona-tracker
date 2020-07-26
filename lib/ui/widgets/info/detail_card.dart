@@ -38,7 +38,7 @@ class DetailCard extends StatelessWidget {
                     SpacingBox(
                       height: 1,
                     ),
-                    Text(dateTime)
+                    Text(address)
                   ],
                 ),
               ),
@@ -50,16 +50,22 @@ class DetailCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Text(nameDiner),
-                    Text(address),
+                    //Text(address),
                   ],
                 ),
               ),
             ],
           ),
+          // Align(
+          //     alignment: Alignment.topRight,
+          //     child: Text(
+          //       "  Chi tiết >>",
+          //       style: TextStyle(color: Color(0xff28E2E2)),
+          //     ))
           Align(
               alignment: Alignment.topRight,
               child: Text(
-                "  Chi tiết >>",
+                dateTime.toString(),
                 style: TextStyle(color: Color(0xff28E2E2)),
               ))
         ],

@@ -111,6 +111,7 @@ class _ScanqrBodyState extends State<ScanqrBody> with BlocCreator {
                 int idstore = int.parse(event.data);
                 // nav to detail
                 Navigator.pop(context);
+                Navigator.pop(context);
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return DetailStore(
                     id: idstore,

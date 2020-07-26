@@ -52,7 +52,9 @@ dependencies:
   audioplayers: ^0.14.0
   rflutter_alert: ^1.0.3
   firebase_remote_config: ^0.3.1
-
+  flutter_widget_from_html_core: ^0.4.2
+  url_launcher: ^5.5.0
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^0.1.2
