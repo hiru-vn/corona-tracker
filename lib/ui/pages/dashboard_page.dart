@@ -2,6 +2,7 @@ import 'package:corona_tracker/json/countries.dart';
 import 'package:corona_tracker/services/api.dart';
 import 'package:corona_tracker/ui/pages/detailStore.dart';
 import 'package:corona_tracker/ui/pages/handwashing.dart';
+import 'package:corona_tracker/ui/pages/list_infect.dart';
 import 'package:corona_tracker/ui/pages/wearmask.dart';
 import 'package:corona_tracker/ui/reuseable/header_appbar.dart';
 import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
@@ -183,9 +184,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                     FlatButton(
                       onPressed: () => Navigator.push(context,
                           MaterialPageRoute(builder: (context) {
-                        return DetailStore(
-                          id: 1,
-                        );
+                        return ListInfectPage();
                       })),
                       child: Text(
                         "Chi tiết",
@@ -259,13 +258,13 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                       "Lây lan Virus",
                       style: kTitleTextstyle,
                     ),
-                    Text(
-                      "Chi tiết",
-                      style: TextStyle(
-                        color: kPrimaryColor,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+                    // Text(
+                    //   "Chi tiết",
+                    //   style: TextStyle(
+                    //     color: kPrimaryColor,
+                    //     fontWeight: FontWeight.w600,
+                    //   ),
+                    // ),
                   ],
                 ),
                 Container(
@@ -307,16 +306,16 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                               SymptomCard(
+                              SymptomCard(
                                 image: "assets/images/headache.png",
                                 title: "Đau đầu",
                                 isActive: true,
                               ),
-                               SymptomCard(
+                              SymptomCard(
                                 image: "assets/images/caugh.png",
                                 title: "Cảm lạnh",
                               ),
-                               SymptomCard(
+                              SymptomCard(
                                 image: "assets/images/fever.png",
                                 title: "Sốt",
                               ),
