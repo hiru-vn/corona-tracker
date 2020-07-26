@@ -22,7 +22,7 @@ class CoronaTracker extends StatelessWidget {
                   scaffoldBackgroundColor: const Color(0xFFFFFFFF)),
               onGenerateRoute: generateRoute,
               navigatorKey: navigatorKey,
-              initialRoute: Views.loginPage),
+              initialRoute: Views.homePage),
         );
       });
     });
