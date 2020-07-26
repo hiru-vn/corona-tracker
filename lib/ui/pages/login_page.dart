@@ -30,6 +30,24 @@ class _RegisterPageState extends State<LoginPage> {
   var _passwordErr = "Mật khẩu không hợp lệ";
   bool userinvalid = false;
   bool passinvalid = false;
+
+  @override
+  void initState() {
+    SPref.instance.get('loggedid').then((value) {
+      if (value == null || !(value is String)) return;
+      globals.id = int.parse(value);
+      print("oke");
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (context) => ChangeNotifierProvider(
+                    create: (_) => HomeController(),
+                    child: HomePage(),
+                  )),
+          (Route<dynamic> route) => false);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -177,12 +195,13 @@ class _RegisterPageState extends State<LoginPage> {
         var data = {
           "username": _emailController.text,
           "password": _passController.text,
-          "long": location.longitude?? 10.9,
-          "lat": location.latitude?? 106.6
+          "long": location.longitude ?? 10.9,
+          "lat": location.latitude ?? 106.6
         };
         response = await dio.post(baseURL, data: data);
         if (response.statusCode == 200) {
           globals.id = response.data['data']['id'];
+          SPref.instance.set('loggedid', response.data['data']['id'].toString());
           print("oke");
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(

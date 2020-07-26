@@ -339,7 +339,7 @@ class _InfoPageState extends State<InfoPage>
                                 .where((element) =>
                                     (element["address"] as String)
                                         .contains(searchText) ||
-                                    (element["date"] as String)
+                                    (element["date"]["String"] as String)
                                         .contains(searchText))
                                 .toList()
                                 .length,
@@ -348,7 +348,7 @@ class _InfoPageState extends State<InfoPage>
                                   ? data[index]["user2infectlevel"]
                                   : data[index]["user1infectlevel"];
                               String storeName = stores[index]["name"];
-                              String time = data[index]["date"]["string"];
+                              String time = data[index]["date"]["String"];
                               String address = data[index]["address"];
                               return Padding(
                                 padding:
@@ -362,13 +362,13 @@ class _InfoPageState extends State<InfoPage>
                                           right: 5,
                                           bottom: 5),
                                       width: double.infinity,
-                                      height: 90,
+                                      //height: 90,
                                       child: DetailCard(
                                         content: "Có khả năng tiếp xúc với F" +
                                             curRisk.toString(),
-                                        dateTime: address ?? '',
-                                        nameDiner: storeName,
-                                        address: '',
+                                        dateTime: time ?? '',
+                                        nameDiner: storeName ?? '',
+                                        address: address??'',
                                       )),
                                 ),
                               );
