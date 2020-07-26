@@ -39,8 +39,10 @@ class _InfoPageState extends State<InfoPage>
 
   @override
   void initState() {
-    fetchData();
-    fetchCityData();
+    Future.delayed(Duration(milliseconds: 300), () {
+      fetchData();
+      fetchCityData();
+    });
     super.initState();
   }
 
