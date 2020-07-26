@@ -1,4 +1,5 @@
 import 'package:corona_tracker/services/navigate_services.dart';
+import 'package:corona_tracker/ui/reuseable/spacing_box.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:corona_tracker/ui/widgets/info/detail_card.dart';
 import 'package:corona_tracker/ui/widgets/info/information_card.dart';
@@ -39,6 +40,7 @@ class _InfoPageState extends State<InfoPage>
   @override
   void initState() {
     fetchData();
+    fetchCityData();
     super.initState();
   }
 
@@ -208,13 +210,34 @@ class _InfoPageState extends State<InfoPage>
                           ),
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
+                      SpacingBox(
+                        width: 2,
+                      ),
+                      InkWell(
+                        onTap: () {
                           Navigator.pushNamed(context, Views.notificationPage);
                         },
-                        icon: Icon(
-                          Icons.notifications,
-                          size: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.notifications,
+                            size: 30,
+                            color: Colors.black87,
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          fetchData();
+                          fetchCityData();
+                        },
+                        child: Padding(
+                          padding: const EdgeInsets.all(5.0),
+                          child: Icon(
+                            Icons.replay,
+                            size: 25,
+                            color: Colors.black87,
+                          ),
                         ),
                       ),
                     ],
@@ -368,7 +391,7 @@ class _InfoPageState extends State<InfoPage>
                                             curRisk.toString(),
                                         dateTime: time ?? '',
                                         nameDiner: storeName ?? '',
-                                        address: address??'',
+                                        address: address ?? '',
                                       )),
                                 ),
                               );

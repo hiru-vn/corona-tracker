@@ -1,3 +1,4 @@
+import 'package:corona_tracker/base_config/src/utils/constants.dart';
 import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +16,7 @@ class SymptomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(5),
       padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15),

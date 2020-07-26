@@ -52,7 +52,8 @@ class _RegisterPageState extends State<RegisterPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(10, 20, 0, 0),
                     child: Text(
-                      "Chào mừng bạn đến với Corona-tracker",
+                      "Chào mừng bạn đến với Corona tracker",
+                      textAlign: TextAlign.center,
                       style: TextStyle(
                           color: Colors.black,
                           fontWeight: FontWeight.bold,

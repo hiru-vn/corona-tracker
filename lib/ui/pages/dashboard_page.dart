@@ -9,6 +9,7 @@ import 'package:corona_tracker/ui/ui_variables.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/counter.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/prevent_card.dart';
 import 'package:corona_tracker/ui/widgets/dashboard/symtom_card.dart';
+import 'package:corona_tracker/utils/remote_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -40,7 +41,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
     super.initState();
     _controller.addListener(onScroll);
     listCountries = API.fetchData();
-    fetchCityData();
+    Future.delayed(Duration(milliseconds: 700), () {
+      fetchCityData();
+    });
     print(globals.id);
   }
 
@@ -114,6 +117,9 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
               textTop: "Hãy ở nhà",
               textBottom: "để bảo vệ bản thân\nvà mọi người",
               offset: offset,
+              reload: () {
+                fetchCityData();
+              },
             ),
             Container(
               margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -279,7 +285,7 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                     ],
                   ),
                   child: Image.network(
-                    "https://i.imgur.com/f9iZ0wB.png",
+                    AppRemoteConfig.instance.mainImage,
                     fit: BoxFit.contain,
                   ),
                 ),
@@ -287,32 +293,6 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Text(
-                      "Triệu chứng",
-                      style: kTitleTextstyle,
-                    ),
-                    const SizedBox(height: 20),
-                    SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          const SymptomCard(
-                            image: "assets/images/headache.png",
-                            title: "Đau đầu",
-                            isActive: true,
-                          ),
-                          const SymptomCard(
-                            image: "assets/images/caugh.png",
-                            title: "Cảm lạnh",
-                          ),
-                          const SymptomCard(
-                            image: "assets/images/fever.png",
-                            title: "Sốt",
-                          ),
-                        ],
-                      ),
-                    ),
                     const SpacingBox(height: 3),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,16 +307,16 @@ class _DashboardPageStateWidget extends State<DashboardPageWidget>
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
-                              const SymptomCard(
+                               SymptomCard(
                                 image: "assets/images/headache.png",
                                 title: "Đau đầu",
                                 isActive: true,
                               ),
-                              const SymptomCard(
+                               SymptomCard(
                                 image: "assets/images/caugh.png",
                                 title: "Cảm lạnh",
                               ),
-                              const SymptomCard(
+                               SymptomCard(
                                 image: "assets/images/fever.png",
                                 title: "Sốt",
                               ),

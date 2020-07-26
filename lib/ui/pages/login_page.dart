@@ -45,6 +45,9 @@ class _RegisterPageState extends State<LoginPage> {
                   )),
           (Route<dynamic> route) => false);
     });
+    SPref.instance.get('city').then(
+      (value) => globals.cityCode = int.parse(value)
+      );
     super.initState();
   }
 
@@ -66,7 +69,8 @@ class _RegisterPageState extends State<LoginPage> {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
-                  "Chào mừng bạn Đến với\nCorona-tracker!",
+                  "Chào mừng bạn Đến với\nCorona tracker!",
+                  textAlign: TextAlign.center,
                   style: TextStyle(
                       fontSize: 25,
                       color: Color(0xff333333),
@@ -198,10 +202,12 @@ class _RegisterPageState extends State<LoginPage> {
           "long": location.longitude ?? 10.9,
           "lat": location.latitude ?? 106.6
         };
-        response = await dio.post(baseURL, data: data);
+        response = await dio.post(baseURL, data: data, options: Options(receiveTimeout: 5000, sendTimeout: 5000));
         if (response.statusCode == 200) {
           globals.id = response.data['data']['id'];
+          globals.cityCode = response.data['citycode']['String'];
           SPref.instance.set('loggedid', response.data['data']['id'].toString());
+          SPref.instance.set('city', response.data['data']['citycode']['String'].toString());
           print("oke");
           Navigator.of(context).pushAndRemoveUntil(
               MaterialPageRoute(

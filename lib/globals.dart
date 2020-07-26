@@ -5,7 +5,7 @@ String fullname;
 String username;
 int yearOfBirth;
 int phone;
-int cityCode = 92;
+int cityCode = 79;
 String address;
 int risk;
 //String baseURL = "http://172.16.14.198:3000";
